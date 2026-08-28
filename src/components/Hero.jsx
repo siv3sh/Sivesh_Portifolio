@@ -89,9 +89,13 @@ export default function Hero() {
           <div className="hero-copy order-2 text-left lg:order-1">
             <p className="hero-reveal hero-greeting">{heroCopy.greeting}</p>
 
-            <h1 className="hero-reveal hero-name">{profile.firstName}</h1>
-
-            <p className="hero-reveal hero-role">{profile.role}</p>
+            <h1 className="hero-reveal">
+              <span className="hero-name block">
+                {profile.firstName}{" "}
+                <span className="sr-only">{profile.lastName}</span>
+              </span>
+              <span className="hero-role mt-1 block">{profile.role}</span>
+            </h1>
 
             <div className="hero-reveal hero-rule-row mt-6 flex items-start gap-4 sm:mt-8">
               <span className="hero-rule mt-3" aria-hidden="true" />
