@@ -5,11 +5,14 @@ import SectionHeading from "./SectionHeading";
 import MagneticCard from "./effects/MagneticCard";
 import { contactAssurances, profile } from "../data/content";
 
+const CONTACT_EMAIL = "hello@sivesh-pb.com";
+const FORMSUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
+
 const contactInfo = [
   {
     label: "Email",
-    value: "siv3sh@gmail.com",
-    href: "mailto:siv3sh@gmail.com",
+    value: CONTACT_EMAIL,
+    href: `mailto:${CONTACT_EMAIL}`,
     icon: "✉",
   },
   {
@@ -29,36 +32,38 @@ const contactInfo = [
 export default function Contact() {
   const sectionRef = useRef(null);
   const formRef = useRef(null);
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState("idle"); // idle | sending | success | error
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const ctx = gsap.context(() => {
       gsap.from(".contact-channel", {
-        y: 24,
+        y: 18,
         opacity: 0,
-        stagger: 0.1,
+        stagger: 0.08,
         duration: 0.7,
         ease: "power3.out",
         scrollTrigger: {
           trigger: section,
-          start: "top 70%",
-          toggleActions: "play none none reverse",
+          start: "top 78%",
+          toggleActions: "play none none none",
         },
       });
 
       if (formRef.current) {
         gsap.from(formRef.current, {
-          y: 32,
+          y: 22,
           opacity: 0,
           duration: 0.8,
           ease: "power3.out",
           scrollTrigger: {
             trigger: formRef.current,
-            start: "top 85%",
-            toggleActions: "play none none reverse",
+            start: "top 88%",
+            toggleActions: "play none none none",
           },
         });
       }
@@ -67,9 +72,50 @@ export default function Contact() {
     return () => ctx.revert();
   }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    if (status === "sending") return;
+
+    const form = e.currentTarget;
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const message = form.message.value.trim();
+
+    setStatus("sending");
+    setErrorMsg("");
+
+    try {
+      const res = await fetch(FORMSUBMIT_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          message,
+          _replyto: email,
+          _subject: `Portfolio inquiry from ${name}`,
+          _template: "table",
+          _captcha: "false",
+        }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        throw new Error(data.message || "Could not send message.");
+      }
+
+      setStatus("success");
+    } catch (err) {
+      setStatus("error");
+      setErrorMsg(
+        err instanceof Error && err.message
+          ? err.message
+          : "Something went wrong. Please email me directly."
+      );
+    }
   };
 
   return (
@@ -89,9 +135,9 @@ export default function Contact() {
                 href={item.href}
                 target={item.label !== "Email" ? "_blank" : undefined}
                 rel={item.label !== "Email" ? "noopener noreferrer" : undefined}
-                className="contact-channel glass group flex items-center gap-4 rounded-xl p-5 transition-all duration-300 hover:border-accent/40 hover:shadow-[0_0_30px_rgba(224,122,74,0.1)]"
+                className="contact-channel glass interactive-card group flex items-center gap-4 rounded-xl p-5 hover:border-cream/15"
               >
-                <span className="flex h-10 w-10 items-center justify-center rounded-lg border border-accent/20 bg-accent/10 text-accent transition-all group-hover:shadow-[0_0_15px_rgba(224,122,74,0.3)]">
+                <span className="flex h-10 w-10 items-center justify-center rounded-lg border border-accent/20 bg-accent/10 text-accent transition-all group-hover:shadow-[0_0_15px_rgba(168,144,108,0.3)]">
                   {item.icon}
                 </span>
                 <div>
@@ -124,9 +170,9 @@ export default function Contact() {
             <MagneticCard className="h-full" tiltStrength={4}>
               <form onSubmit={handleSubmit} className="gradient-border h-full">
                 <div className="gradient-border-inner p-6 md:p-8">
-                  {submitted ? (
+                  {status === "success" ? (
                     <div className="flex min-h-[320px] flex-col items-center justify-center text-center">
-                      <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-2xl text-accent shadow-[0_0_40px_rgba(224,122,74,0.2)]">
+                      <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full border border-accent/30 bg-accent/10 text-2xl text-accent shadow-[0_0_40px_rgba(168,144,108,0.2)]">
                         ✓
                       </div>
                       <p className="font-heading text-2xl font-bold text-gradient">
@@ -156,7 +202,8 @@ export default function Contact() {
                           name="name"
                           type="text"
                           required
-                          className="w-full rounded-lg border border-border/80 bg-surface-raised/60 px-4 py-3 text-cream outline-none transition-all placeholder:text-muted/80 focus:border-accent/50 focus:shadow-[0_0_20px_rgba(224,122,74,0.1)] focus:ring-1 focus:ring-accent/30"
+                          disabled={status === "sending"}
+                          className="w-full rounded-lg border border-border/80 bg-surface-raised/60 px-4 py-3 text-cream outline-none transition-all placeholder:text-muted/80 focus:border-accent/50 focus:shadow-[0_0_20px_rgba(168,144,108,0.1)] focus:ring-1 focus:ring-accent/30 disabled:opacity-60"
                           placeholder="Jane Smith"
                         />
                       </div>
@@ -170,7 +217,8 @@ export default function Contact() {
                           name="email"
                           type="email"
                           required
-                          className="w-full rounded-lg border border-border/80 bg-surface-raised/60 px-4 py-3 text-cream outline-none transition-all placeholder:text-muted/80 focus:border-accent/50 focus:shadow-[0_0_20px_rgba(224,122,74,0.1)] focus:ring-1 focus:ring-accent/30"
+                          disabled={status === "sending"}
+                          className="w-full rounded-lg border border-border/80 bg-surface-raised/60 px-4 py-3 text-cream outline-none transition-all placeholder:text-muted/80 focus:border-accent/50 focus:shadow-[0_0_20px_rgba(168,144,108,0.1)] focus:ring-1 focus:ring-accent/30 disabled:opacity-60"
                           placeholder="you@company.com"
                         />
                       </div>
@@ -184,18 +232,34 @@ export default function Contact() {
                           name="message"
                           rows={5}
                           required
-                          className="w-full resize-none rounded-lg border border-border/80 bg-surface-raised/60 px-4 py-3 text-cream outline-none transition-all placeholder:text-muted/80 focus:border-accent/50 focus:shadow-[0_0_20px_rgba(224,122,74,0.1)] focus:ring-1 focus:ring-accent/30"
+                          disabled={status === "sending"}
+                          className="w-full resize-none rounded-lg border border-border/80 bg-surface-raised/60 px-4 py-3 text-cream outline-none transition-all placeholder:text-muted/80 focus:border-accent/50 focus:shadow-[0_0_20px_rgba(168,144,108,0.1)] focus:ring-1 focus:ring-accent/30 disabled:opacity-60"
                           placeholder="What problem are you solving? What's your ideal timeline? Any tech constraints?"
                         />
                       </div>
 
-                      <button type="submit" className="btn-neon w-full rounded-xl py-4 text-sm">
-                        Send message — I&apos;ll reply within 24h
+                      {status === "error" && (
+                        <p className="mb-4 text-center text-sm text-red-300/90" role="alert">
+                          {errorMsg}{" "}
+                          <a href={`mailto:${CONTACT_EMAIL}`} className="text-accent underline">
+                            {CONTACT_EMAIL}
+                          </a>
+                        </p>
+                      )}
+
+                      <button
+                        type="submit"
+                        disabled={status === "sending"}
+                        className="btn-neon w-full rounded-xl py-4 text-sm disabled:cursor-wait disabled:opacity-70"
+                      >
+                        {status === "sending"
+                          ? "Sending…"
+                          : "Send message — I\u2019ll reply within 24h"}
                       </button>
                       <p className="mt-4 text-center text-xs text-muted">
                         Prefer email?{" "}
-                        <a href="mailto:siv3sh@gmail.com" className="text-accent hover:underline">
-                          siv3sh@gmail.com
+                        <a href={`mailto:${CONTACT_EMAIL}`} className="text-accent hover:underline">
+                          {CONTACT_EMAIL}
                         </a>
                       </p>
                     </>

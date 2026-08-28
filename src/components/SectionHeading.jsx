@@ -11,19 +11,19 @@ export default function SectionHeading({ sectionKey, title, subtitle }) {
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const ctx = gsap.context(() => {
       gsap.from(el.querySelectorAll("[data-heading-part]"), {
-        y: 60,
-        z: -80,
+        y: 22,
         opacity: 0,
-        stagger: 0.1,
-        duration: 1,
+        stagger: 0.07,
+        duration: 0.85,
         ease: "power3.out",
         scrollTrigger: {
           trigger: el,
-          start: "top 85%",
-          toggleActions: "play none none reverse",
+          start: "top 88%",
+          toggleActions: "play none none none",
         },
       });
     }, el);
@@ -34,13 +34,13 @@ export default function SectionHeading({ sectionKey, title, subtitle }) {
   return (
     <div ref={ref} className="mb-14 md:mb-20">
       <div data-heading-part className="mb-6 flex items-center gap-3 sm:gap-4">
-        <span className="font-mono-tech text-sm font-semibold tracking-widest text-accent">
+        <span className="font-mono-tech text-sm font-semibold tracking-widest text-muted">
           {meta?.num}
         </span>
         <div className="section-line min-w-8 flex-1" />
-        <BrandMark size="sm" className="brand-mark-glow opacity-90" />
+        <BrandMark size="sm" className="opacity-80" />
         <div className="section-line min-w-8 flex-1" />
-        <span className="font-mono-tech text-xs tracking-[0.25em] text-accent-2/70 uppercase">
+        <span className="font-mono-tech text-xs tracking-[0.25em] text-muted uppercase">
           {meta?.label}
         </span>
       </div>

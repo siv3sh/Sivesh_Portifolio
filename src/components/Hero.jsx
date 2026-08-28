@@ -1,9 +1,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { socialLinks, heroStats, profile } from "../data/content";
-import { BrandHero, BrandWatermark } from "./brand";
-import TypeWriter from "./effects/TypeWriter";
+import { socialLinks, heroStats, profile, heroCopy } from "../data/content";
 
 const GitHubIcon = () => (
   <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -23,7 +21,12 @@ const LinkedInIcon = () => (
 
 const MailIcon = () => (
   <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={1.5}
+      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+    />
   </svg>
 );
 
@@ -31,120 +34,147 @@ const iconMap = { GitHub: GitHubIcon, LinkedIn: LinkedInIcon, Email: MailIcon };
 
 export default function Hero() {
   const sectionRef = useRef(null);
-  const contentRef = useRef(null);
+  const statsRef = useRef(null);
 
   useEffect(() => {
     const section = sectionRef.current;
-    const content = contentRef.current;
     if (!section) return;
 
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) return;
+
     const ctx = gsap.context(() => {
-      if (content) {
-        gsap.to(content, {
-          y: -40,
-          opacity: 0.85,
-          ease: "none",
+      gsap.from(".hero-reveal", {
+        y: 24,
+        opacity: 0,
+        duration: 0.9,
+        stagger: 0.07,
+        ease: "power3.out",
+        delay: 0.06,
+      });
+
+      gsap.from(".hero-portrait", {
+        opacity: 0,
+        x: 28,
+        duration: 1,
+        ease: "power3.out",
+        delay: 0.12,
+      });
+
+      if (statsRef.current) {
+        gsap.from(".hero-stat", {
+          y: 18,
+          opacity: 0,
+          stagger: 0.06,
+          duration: 0.7,
+          ease: "power3.out",
           scrollTrigger: {
-            trigger: section,
-            start: "top top",
-            end: "bottom top",
-            scrub: 0.4,
+            trigger: statsRef.current,
+            start: "top 90%",
+            toggleActions: "play none none none",
           },
         });
       }
-
-      gsap.from(".hero-stat", {
-        y: 24,
-        opacity: 0,
-        stagger: 0.08,
-        duration: 0.8,
-        ease: "power3.out",
-        delay: 0.3,
-        scrollTrigger: {
-          trigger: section,
-          start: "top 70%",
-          toggleActions: "play none none reverse",
-        },
-      });
     }, section);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <section
-      id="hero"
-      ref={sectionRef}
-      className="hero-section relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden px-4 pt-28 pb-16 sm:px-6"
-    >
-      <BrandWatermark />
+    <section id="hero" ref={sectionRef} className="hero-section relative overflow-hidden">
+      <div className="hero-ambient pointer-events-none absolute inset-0 z-0" aria-hidden="true" />
 
-      <div className="brand-hero-orb pointer-events-none absolute top-[38%] left-1/2 h-[min(100vw,640px)] w-[min(100vw,640px)] -translate-x-1/2 -translate-y-1/2 rounded-full" />
+      <div className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-6xl flex-col justify-center px-5 pt-28 pb-16 sm:px-8 lg:px-10">
+        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-8 xl:gap-12">
+          <div className="hero-copy order-2 text-left lg:order-1">
+            <p className="hero-reveal hero-greeting">{heroCopy.greeting}</p>
 
-      <div ref={contentRef} className="relative z-10 mx-auto w-full max-w-5xl text-center">
-        <BrandHero />
+            <h1 className="hero-reveal hero-name">{profile.firstName}</h1>
 
-        <p className="hero-eyebrow mx-auto mt-10 max-w-md text-sm text-cream-muted">
-          <span className="font-semibold text-accent">{profile.role}</span>
-          <span className="mx-2 text-border">·</span>
-          <span className="inline-flex items-center justify-center gap-1.5">
-            <span className="brand-status-dot" aria-hidden="true" />
-            {profile.availability}
-          </span>
-        </p>
+            <p className="hero-reveal hero-role">{profile.role}</p>
 
-        <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-cream-muted sm:text-xl">
-          {profile.tagline}
-        </p>
-
-        <div className="mt-8 flex min-h-[2rem] flex-wrap items-center justify-center gap-2 text-sm text-muted">
-          <span>Specializing in</span>
-          <TypeWriter />
-        </div>
-
-        <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <a href="#contact" className="btn-neon w-full rounded-xl px-10 py-4 text-sm sm:w-auto">
-            Book a free discovery call
-          </a>
-          <a href="#projects" className="btn-ghost w-full rounded-xl px-10 py-4 text-sm sm:w-auto">
-            View my work
-          </a>
-        </div>
-
-        <div className="mt-8 flex items-center justify-center gap-4">
-          {socialLinks.map((link) => {
-            const Icon = iconMap[link.label];
-            return (
-              <a
-                key={link.label}
-                href={link.href}
-                target={link.label !== "Email" ? "_blank" : undefined}
-                rel={link.label !== "Email" ? "noopener noreferrer" : undefined}
-                aria-label={link.label}
-                className="glass flex h-11 w-11 items-center justify-center rounded-xl text-cream-muted transition-all hover:border-accent/50 hover:text-accent"
-              >
-                <Icon />
-              </a>
-            );
-          })}
-        </div>
-
-        <div className="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-          {heroStats.map((stat) => (
-            <div key={stat.label} className="hero-stat brand-stat-card rounded-xl px-4 py-4">
-              <p className="font-heading text-2xl font-semibold text-cream sm:text-3xl">
-                {stat.value}
-              </p>
-              <p className="mt-1 text-[11px] leading-snug text-muted sm:text-xs">{stat.label}</p>
+            <div className="hero-reveal hero-rule-row mt-6 flex items-start gap-4 sm:mt-8">
+              <span className="hero-rule mt-3" aria-hidden="true" />
+              <div className="space-y-1">
+                {heroCopy.lines.map((line) => (
+                  <p key={line} className="hero-support">
+                    {line}
+                  </p>
+                ))}
+              </div>
             </div>
-          ))}
+
+            <p className="hero-reveal mt-6 max-w-xl text-base leading-relaxed text-cream-muted sm:text-lg">
+              {profile.tagline}
+            </p>
+
+            <div className="hero-reveal mt-5 inline-flex items-center gap-2 text-sm text-muted">
+              <span className="brand-status-dot" aria-hidden="true" />
+              {profile.availability}
+            </div>
+
+            <div className="hero-reveal mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <a href="#contact" className="btn-neon rounded-xl px-8 py-3.5 text-center text-sm sm:px-10 sm:py-4">
+                Book a free discovery call
+              </a>
+              <a href="#projects" className="btn-ghost rounded-xl px-8 py-3.5 text-center text-sm sm:px-10 sm:py-4">
+                View my work
+              </a>
+            </div>
+
+            <div className="hero-reveal mt-8 flex items-center gap-3">
+              {socialLinks.map((link) => {
+                const Icon = iconMap[link.label];
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target={link.label !== "Email" ? "_blank" : undefined}
+                    rel={link.label !== "Email" ? "noopener noreferrer" : undefined}
+                    aria-label={link.label}
+                    className="hero-social glass flex h-11 w-11 items-center justify-center rounded-full text-cream-muted"
+                  >
+                    <Icon />
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="hero-reveal hero-portrait-wrap order-1 flex justify-center lg:order-2 lg:justify-end">
+            <div className="hero-portrait relative">
+              <div className="hero-portrait-glow" aria-hidden="true" />
+              <img
+                src="/sivesh-portrait.png?v=6"
+                alt={`${profile.fullName}, ${profile.role}`}
+                className="hero-portrait-img relative z-[1]"
+                width={666}
+                height={983}
+                decoding="async"
+                fetchPriority="high"
+              />
+              <div className="hero-portrait-fade" aria-hidden="true" />
+            </div>
+          </div>
+        </div>
+
+        <div className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-muted/70 sm:flex">
+          <span className="font-mono-tech text-[10px] tracking-[0.25em] uppercase">Scroll</span>
+          <div className="brand-scroll-indicator">
+            <div className="brand-scroll-dot" />
+          </div>
         </div>
       </div>
 
-      <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 text-muted/70">
-        <span className="font-mono-tech text-[10px] tracking-[0.25em] uppercase">Scroll</span>
-        <div className="brand-scroll-indicator">
-          <div className="brand-scroll-dot" />
+      <div ref={statsRef} className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-20 sm:px-8 lg:px-10 lg:pb-28">
+        <div className="section-line mb-10 opacity-60" />
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+          {heroStats.map((stat) => (
+            <div key={stat.label} className="hero-stat brand-stat-card rounded-xl px-4 py-5 sm:px-5">
+              <p className="font-heading text-2xl font-semibold text-cream sm:text-3xl">{stat.value}</p>
+              <p className="mt-1.5 text-[11px] leading-snug text-muted sm:text-xs">{stat.label}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

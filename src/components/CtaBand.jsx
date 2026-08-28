@@ -4,16 +4,14 @@ import { BrandMark } from "./brand";
 import { brand } from "../data/brand";
 
 export default function CtaBand() {
-  const { ref, visible } = useScrollReveal(0.1, "0px 0px -50px 0px");
+  const { ref, visible } = useScrollReveal(0.1);
 
   return (
     <section className="relative px-6 py-16 md:py-20" aria-label="Call to action">
       <div className="mx-auto max-w-6xl">
         <div
           ref={ref}
-          className={`gradient-border overflow-hidden transition-all duration-700 ${
-            visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-          }`}
+          className={`reveal gradient-border overflow-hidden ${visible ? "is-visible" : ""}`}
         >
           <div className="gradient-border-inner relative px-8 py-12 text-center md:px-16 md:py-16">
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-accent-2/10" />
@@ -40,7 +38,7 @@ export default function CtaBand() {
                   Start a conversation
                 </a>
                 <a
-                  href="mailto:siv3sh@gmail.com"
+                  href="mailto:hello@sivesh-pb.com"
                   className="btn-ghost w-full rounded-xl px-10 py-4 text-sm sm:w-auto"
                 >
                   Email directly

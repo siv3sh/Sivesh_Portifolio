@@ -8,16 +8,14 @@ function ProcessStep({ step, index }) {
   return (
     <div
       ref={ref}
-      className={`relative transition-all duration-700 ${
-        visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-      }`}
-      style={{ transitionDelay: visible ? `${index * 80}ms` : "0ms" }}
+      className={`reveal relative ${visible ? "is-visible" : ""}`}
+      style={{ transitionDelay: visible ? `${index * 60}ms` : "0ms" }}
     >
-      <div className="gradient-border h-full">
+      <div className="gradient-border interactive-card h-full">
         <div className="gradient-border-inner flex h-full flex-col p-6 md:p-7">
           <div className="flex items-start justify-between gap-4">
-            <span className="font-mono-tech text-3xl font-bold text-accent/20">{step.step}</span>
-            <span className="shrink-0 rounded-full border border-accent-2/25 bg-accent-2/10 px-3 py-1 font-mono-tech text-[10px] tracking-wider text-accent-2 uppercase">
+            <span className="font-mono-tech text-3xl font-bold text-cream/15">{step.step}</span>
+            <span className="shrink-0 rounded-full border border-cream/12 bg-cream/[0.03] px-3 py-1 font-mono-tech text-[10px] tracking-wider text-muted uppercase">
               {step.duration}
             </span>
           </div>
@@ -36,7 +34,7 @@ export default function Process() {
 
   return (
     <section id="process" className="immersive-section relative px-6 py-24 md:py-32">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-accent/5 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-cream/[0.02] to-transparent" />
 
       <div className="relative mx-auto max-w-6xl">
         <SectionHeading
@@ -53,17 +51,17 @@ export default function Process() {
 
         <div
           ref={ref}
-          className={`mt-12 rounded-2xl border border-accent/15 bg-accent/5 p-6 transition-all duration-700 md:mt-16 md:p-8 ${
-            visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+          className={`reveal mt-12 rounded-2xl border border-cream/10 bg-cream/[0.03] p-6 md:mt-16 md:p-8 ${
+            visible ? "is-visible" : ""
           }`}
         >
-          <p className="font-mono-tech text-xs tracking-widest text-accent uppercase">
+          <p className="font-mono-tech text-xs tracking-widest text-muted uppercase">
             A strong fit if you are…
           </p>
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
             {idealClients.map((item) => (
               <li key={item} className="flex gap-3 text-sm text-cream-muted">
-                <span className="mt-0.5 shrink-0 text-accent">✓</span>
+                <span className="mt-0.5 shrink-0 text-cream-muted">✓</span>
                 <span>{item}</span>
               </li>
             ))}

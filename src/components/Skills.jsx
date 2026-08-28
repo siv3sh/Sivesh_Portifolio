@@ -10,20 +10,18 @@ function SkillCard({ category, index }) {
   return (
     <div
       ref={ref}
-      className={`w-full transition-all duration-700 ease-out ${
-        visible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-      }`}
-      style={{ transitionDelay: visible ? `${index * 80}ms` : "0ms" }}
+      className={`reveal w-full ${visible ? "is-visible" : ""}`}
+      style={{ transitionDelay: visible ? `${index * 60}ms` : "0ms" }}
     >
-      <MagneticCard className="w-full" tiltStrength={6}>
-        <div className="gradient-border neon-glow-hover w-full">
+      <MagneticCard className="w-full" tiltStrength={2.5}>
+        <div className="gradient-border w-full">
           <div className="gradient-border-inner p-6 md:p-8">
             <div className="mb-5 flex items-center gap-3">
-              <span className="flex h-12 w-12 items-center justify-center rounded-lg border border-accent/20 bg-accent/10 text-xl text-accent">
+              <span className="flex h-12 w-12 items-center justify-center rounded-lg border border-cream/10 bg-cream/[0.03] text-xl text-cream-muted">
                 {category.icon}
               </span>
               <div>
-                <span className="font-mono-tech text-[10px] tracking-widest text-accent-2/60 uppercase">
+                <span className="font-mono-tech text-[10px] tracking-widest text-muted uppercase">
                   Layer {String(index + 1).padStart(2, "0")}
                 </span>
                 <h3 className="font-heading text-lg font-bold text-cream md:text-xl">
@@ -36,7 +34,7 @@ function SkillCard({ category, index }) {
               {category.skills.map((skill) => (
                 <span
                   key={skill}
-                  className="skill-tag rounded-md border border-border/80 bg-surface-raised/60 px-3 py-1.5 font-mono-tech text-[11px] tracking-wide text-cream-muted transition-all duration-200 hover:border-accent/40 hover:bg-accent/10 hover:text-accent"
+                  className="skill-tag rounded-md border border-border/80 bg-surface-raised/60 px-3 py-1.5 font-mono-tech text-[11px] tracking-wide text-cream-muted transition-[border-color,background-color,color,transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:border-cream/25 hover:bg-cream/[0.05] hover:text-cream hover:-translate-y-0.5"
                 >
                   {skill}
                 </span>

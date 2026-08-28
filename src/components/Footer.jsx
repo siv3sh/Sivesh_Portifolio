@@ -3,11 +3,7 @@ import { brand } from "../data/brand";
 
 function scrollToTop(e) {
   e.preventDefault();
-  if (window.lenis) {
-    window.lenis.scrollTo(0, { duration: 1.1 });
-  } else {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 export default function Footer() {

@@ -11,6 +11,15 @@ export const profile = {
   availability: "Open to new opportunities",
 };
 
+/** Hero split-layout copy (HTML text — not baked into the photo) */
+export const heroCopy = {
+  greeting: "Hey I'm",
+  lines: [
+    "Building intelligent solutions.",
+    "Shaping the future with AI.",
+  ],
+};
+
 export const navLinks = [
   { label: "About", href: "#about", id: "about" },
   { label: "Process", href: "#process", id: "process" },
@@ -103,7 +112,7 @@ export const idealClients = [
 export const socialLinks = [
   { label: "GitHub", href: "https://github.com/siv3sh" },
   { label: "LinkedIn", href: "https://linkedin.com/in/siv3sh" },
-  { label: "Email", href: "mailto:siv3sh@gmail.com" },
+  { label: "Email", href: "mailto:hello@sivesh-pb.com" },
 ];
 
 export const skillCategories = [

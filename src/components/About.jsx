@@ -13,32 +13,33 @@ export default function About() {
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     const ctx = gsap.context(() => {
       if (portraitRef.current) {
         gsap.from(portraitRef.current, {
-          y: 32,
+          y: 24,
           opacity: 0,
-          duration: 0.8,
+          duration: 0.85,
           ease: "power3.out",
           scrollTrigger: {
             trigger: portraitRef.current,
-            start: "top 85%",
-            toggleActions: "play none none reverse",
+            start: "top 88%",
+            toggleActions: "play none none none",
           },
         });
       }
 
       gsap.from(".about-highlight", {
-        y: 24,
+        y: 18,
         opacity: 0,
-        stagger: 0.08,
+        stagger: 0.07,
         duration: 0.7,
         ease: "power3.out",
         scrollTrigger: {
           trigger: listRef.current,
-          start: "top 80%",
-          toggleActions: "play none none reverse",
+          start: "top 85%",
+          toggleActions: "play none none none",
         },
       });
     }, section);
@@ -119,7 +120,7 @@ export default function About() {
               {aboutHighlights.map((item, i) => (
                 <li
                   key={i}
-                  className="about-highlight group glass flex gap-4 rounded-xl p-4 transition-all duration-300 hover:border-accent/30 hover:shadow-[0_0_25px_rgba(224,122,74,0.08)]"
+                  className="about-highlight group glass interactive-card flex gap-4 rounded-xl p-4 hover:border-cream/15"
                 >
                   <span className="mt-0.5 shrink-0 text-accent">✓</span>
                   <span className="text-sm leading-relaxed text-cream-muted transition-colors group-hover:text-cream sm:text-base">
