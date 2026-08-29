@@ -147,7 +147,7 @@ export default function Hero() {
               <div className="corner-frame-alt absolute inset-0" />
             </div>
             <img
-              src="/sivesh-portrait.png?v=8"
+              src="/sivesh-portrait.png?v=9"
               alt={`${profile.fullName}, ${profile.role}`}
               className="hero-portrait-img relative"
               width={682}
