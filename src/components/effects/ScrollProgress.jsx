@@ -59,7 +59,7 @@ export default function ScrollProgress() {
           aria-valuenow={pct}
         />
       </div>
-      <p className="absolute top-2 right-3 hidden font-mono-tech text-[9px] tracking-[0.18em] text-muted uppercase md:block">
+      <p className="absolute top-2 right-3 font-mono-tech text-[9px] tracking-[0.18em] text-muted uppercase">
         {String(pct).padStart(2, "0")}%
       </p>
     </div>

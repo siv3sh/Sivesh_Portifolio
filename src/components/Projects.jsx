@@ -59,7 +59,7 @@ function FeaturedCase({ project, index }) {
             </span>
           </div>
 
-          <h3 className="mt-5 font-heading text-2xl font-medium tracking-[-0.03em] text-cream transition-colors group-hover:text-accent md:text-3xl lg:text-[2.35rem] lg:leading-[1.1]">
+          <h3 className="mt-4 font-heading text-xl font-medium tracking-[-0.03em] text-cream transition-colors group-hover:text-accent sm:mt-5 sm:text-2xl md:text-3xl lg:text-[2.35rem] lg:leading-[1.1]">
             {project.title}
           </h3>
 
@@ -219,7 +219,7 @@ export default function Projects() {
   return (
     <section
       id="projects"
-      className="immersive-section relative overflow-hidden px-6 py-24 md:py-32"
+      className="immersive-section relative overflow-hidden px-4 py-20 sm:px-6 sm:py-24 md:py-32"
     >
       <div className="tech-grid pointer-events-none absolute inset-0 -z-10 opacity-30" aria-hidden="true" />
 
@@ -230,9 +230,9 @@ export default function Projects() {
           subtitle="Visual case studies — system maps, the problem, what shipped, and the metric that mattered."
         />
 
-        <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+        <div className="mb-8 flex flex-col gap-4 sm:mb-10 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
           <div
-            className="flex flex-wrap gap-2"
+            className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0 [&::-webkit-scrollbar]:hidden"
             role="toolbar"
             aria-label="Filter projects by stack"
           >
@@ -244,7 +244,7 @@ export default function Projects() {
                   type="button"
                   onClick={() => setFilter(label)}
                   aria-pressed={active}
-                  className={`border px-3 py-1.5 font-mono-tech text-[10px] tracking-[0.16em] uppercase transition-colors ${
+                  className={`shrink-0 border px-3 py-2 font-mono-tech text-[10px] tracking-[0.16em] uppercase transition-colors ${
                     active
                       ? "border-accent bg-accent text-[#f7f8fa]"
                       : "border-border text-muted hover:border-accent hover:text-accent"
@@ -279,7 +279,7 @@ export default function Projects() {
                   <p className="mb-4 font-mono-tech text-[10px] tracking-[0.18em] text-muted uppercase">
                     [More cases]
                   </p>
-                  <div className="grid gap-5 md:grid-cols-3">
+                  <div className="grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
                     {cards.map((project, i) => (
                       <CaseCard
                         key={project.title}

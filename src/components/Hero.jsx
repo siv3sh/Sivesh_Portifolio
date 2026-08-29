@@ -192,44 +192,44 @@ export default function Hero() {
         aria-hidden="true"
       />
 
-      <div className="relative z-10 mx-auto grid w-full max-w-6xl flex-1 items-center gap-12 px-6 pt-28 pb-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16 lg:pt-32 lg:pb-12">
+      <div className="relative z-10 mx-auto grid w-full max-w-6xl flex-1 items-center gap-10 px-4 pt-24 pb-8 sm:px-6 sm:pt-28 sm:pb-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16 lg:pt-32 lg:pb-12">
         <div className="order-2 lg:order-1">
-          <div className="hero-reveal flex items-center gap-3 opacity-0">
+          <div className="hero-reveal flex flex-wrap items-center gap-2 opacity-0 sm:gap-3">
             <span className="crosshair shrink-0" aria-hidden="true" />
             <p className="label-mono text-accent">[{brand.monogram}]</p>
-            <span className="rule-strong max-w-12 flex-1" />
-            <p className="label-mono bracket">{brand.line}</p>
+            <span className="rule-strong hidden max-w-12 flex-1 sm:block" />
+            <p className="label-mono bracket w-full sm:w-auto">{brand.line}</p>
           </div>
 
-          <h1 className="mt-6" style={{ perspective: "800px" }}>
+          <h1 className="mt-5 sm:mt-6" style={{ perspective: "800px" }}>
             <span
               ref={nameRef}
-              className="hero-name-split block font-heading text-[clamp(3rem,8vw,5.5rem)] leading-[0.9] font-medium tracking-[-0.045em] text-cream"
+              className="hero-name-split block font-heading text-[clamp(2.5rem,11vw,5.5rem)] leading-[0.9] font-medium tracking-[-0.045em] text-cream"
             >
               {profile.fullName}
             </span>
             <span
               ref={roleRef}
-              className="mt-4 block font-mono-tech text-[12px] tracking-[0.34em] text-accent uppercase opacity-0"
+              className="mt-3 block font-mono-tech text-[11px] tracking-[0.28em] text-accent uppercase opacity-0 sm:mt-4 sm:text-[12px] sm:tracking-[0.34em]"
             >
               {profile.role}
             </span>
           </h1>
 
-          <p className="hero-reveal mt-7 max-w-md font-heading text-xl leading-snug font-medium tracking-[-0.025em] text-cream opacity-0 sm:text-2xl">
+          <p className="hero-reveal mt-5 max-w-md font-heading text-lg leading-snug font-medium tracking-[-0.025em] text-cream opacity-0 sm:mt-7 sm:text-xl md:text-2xl">
             {heroCopy.lines[0]}{" "}
             <span className="text-cream-muted">{heroCopy.lines[1]}</span>
           </p>
 
-          <p className="hero-reveal mt-5 max-w-lg text-base leading-relaxed text-cream-muted opacity-0">
+          <p className="hero-reveal mt-4 max-w-lg text-[15px] leading-relaxed text-cream-muted opacity-0 sm:mt-5 sm:text-base">
             {profile.tagline}
           </p>
 
-          <div className="hero-reveal mt-9 flex flex-col gap-3 opacity-0 sm:flex-row sm:items-center">
-            <a href="#contact" className="btn-neon px-8 py-3.5 text-center sm:px-10">
+          <div className="hero-reveal mt-7 flex flex-col gap-3 opacity-0 sm:mt-9 sm:flex-row sm:items-center">
+            <a href="#contact" className="btn-neon px-6 py-3.5 text-center sm:px-10">
               Book a free discovery call
             </a>
-            <a href="#projects" className="btn-ghost px-8 py-3.5 text-center sm:px-10">
+            <a href="#projects" className="btn-ghost px-6 py-3.5 text-center sm:px-10">
               View my work
             </a>
           </div>
@@ -260,28 +260,28 @@ export default function Hero() {
         <div className="order-1 flex justify-center lg:order-2 lg:justify-end">
           <div
             ref={portraitRef}
-            className="hero-portrait-frame relative mx-auto w-full max-w-[22rem] opacity-0 sm:max-w-md lg:ml-auto lg:max-w-[26rem]"
+            className="hero-portrait-frame relative mx-auto w-full max-w-[16.5rem] opacity-0 sm:max-w-md lg:ml-auto lg:max-w-[26rem]"
           >
             <div
-              className="pointer-events-none absolute -inset-6 -z-10 bg-[radial-gradient(circle_at_center,color-mix(in_oklab,var(--color-accent)_18%,transparent),transparent_70%)]"
+              className="pointer-events-none absolute -inset-4 -z-10 bg-[radial-gradient(circle_at_center,color-mix(in_oklab,var(--color-accent)_18%,transparent),transparent_70%)] sm:-inset-6"
               aria-hidden="true"
             />
 
-            <div className="absolute -inset-3 border border-[var(--color-border-strong)]" aria-hidden="true">
+            <div className="absolute -inset-2 border border-[var(--color-border-strong)] sm:-inset-3" aria-hidden="true">
               <div className="corner-frame absolute inset-0" />
               <div className="corner-frame-alt absolute inset-0" />
             </div>
 
-            <div className="absolute top-0 left-0 z-20 -translate-y-full pb-3">
-              <p className="font-mono-tech text-[10px] tracking-[0.2em] text-accent uppercase">
+            <div className="absolute top-0 left-0 z-20 -translate-y-full pb-2 sm:pb-3">
+              <p className="font-mono-tech text-[9px] tracking-[0.16em] text-accent uppercase sm:text-[10px] sm:tracking-[0.2em]">
                 [{brand.monogram} · PORTRAIT]
               </p>
             </div>
 
-            <div className="absolute top-0 right-0 z-20 -translate-y-full pb-3 text-right">
-              <p className="inline-flex items-center gap-2 border border-border bg-ink/90 px-2.5 py-1.5 font-mono-tech text-[10px] tracking-[0.14em] text-muted uppercase backdrop-blur-sm">
-                <span className="signal-dot" aria-hidden="true" />
-                {profile.availability}
+            <div className="absolute top-0 right-0 z-20 -translate-y-full pb-2 text-right sm:pb-3">
+              <p className="inline-flex max-w-[9.5rem] items-center gap-1.5 border border-border bg-ink/90 px-2 py-1 font-mono-tech text-[9px] leading-tight tracking-[0.1em] text-muted uppercase backdrop-blur-sm sm:max-w-none sm:gap-2 sm:px-2.5 sm:py-1.5 sm:text-[10px] sm:tracking-[0.14em]">
+                <span className="signal-dot shrink-0" aria-hidden="true" />
+                <span className="truncate sm:whitespace-normal">Open to work</span>
               </p>
             </div>
 
@@ -297,37 +297,37 @@ export default function Hero() {
 
             <div className="scanlines pointer-events-none absolute inset-0 z-[2] opacity-35" aria-hidden="true" />
 
-            <div className="absolute right-0 bottom-0 z-20 translate-y-full pt-3 text-right">
-              <p className="font-mono-tech text-[10px] tracking-[0.16em] text-muted uppercase">
+            <div className="absolute right-0 bottom-0 z-20 translate-y-full pt-2 text-right sm:pt-3">
+              <p className="font-mono-tech text-[9px] tracking-[0.14em] text-muted uppercase sm:text-[10px] sm:tracking-[0.16em]">
                 Remote · Ideaelan
               </p>
               <a
                 href={resume.href}
                 download={resume.fileName}
-                className="mt-1 inline-block font-mono-tech text-[10px] tracking-[0.16em] text-accent uppercase transition-opacity hover:opacity-70"
+                className="mt-1 inline-block font-mono-tech text-[9px] tracking-[0.14em] text-accent uppercase transition-opacity hover:opacity-70 sm:text-[10px] sm:tracking-[0.16em]"
               >
-                ↓ {resume.fileName}
+                ↓ Resume PDF
               </a>
             </div>
           </div>
         </div>
       </div>
 
-      <div ref={statsRef} className="relative z-10 mx-auto w-full max-w-6xl px-6 pb-8 lg:pb-10">
+      <div ref={statsRef} className="relative z-10 mx-auto w-full max-w-6xl px-4 pb-6 sm:px-6 sm:pb-8 lg:pb-10">
         <div className="rule-strong" />
         <dl className="grid grid-cols-2 sm:grid-cols-4">
           {heroStats.map((stat) => (
             <div
               key={stat.label}
-              className="hero-stat border-b border-[var(--color-border-strong)] px-1 py-6 opacity-0 sm:border-b-0 sm:border-r sm:px-6 sm:py-7 sm:first:pl-0 sm:last:border-r-0"
+              className="hero-stat border-b border-[var(--color-border-strong)] px-1 py-5 opacity-0 sm:border-b-0 sm:border-r sm:px-6 sm:py-7 sm:first:pl-0 sm:last:border-r-0"
             >
               <dt
                 data-metric={stat.value}
-                className="font-heading text-3xl leading-none font-medium tracking-[-0.03em] text-cream md:text-4xl"
+                className="font-heading text-2xl leading-none font-medium tracking-[-0.03em] text-cream sm:text-3xl md:text-4xl"
               >
                 {stat.value}
               </dt>
-              <dd className="mt-2 font-mono-tech text-[10px] leading-snug tracking-[0.12em] text-muted uppercase">
+              <dd className="mt-2 font-mono-tech text-[9px] leading-snug tracking-[0.1em] text-muted uppercase sm:text-[10px] sm:tracking-[0.12em]">
                 {stat.label}
               </dd>
             </div>
@@ -337,11 +337,11 @@ export default function Hero() {
 
         <a
           href="#trust"
-          className="hero-reveal mt-6 flex items-center justify-center gap-3 opacity-0 font-mono-tech text-[10px] tracking-[0.2em] text-muted uppercase transition-colors hover:text-accent"
+          className="hero-reveal mt-5 flex items-center justify-center gap-3 opacity-0 font-mono-tech text-[10px] tracking-[0.2em] text-muted uppercase transition-colors hover:text-accent sm:mt-6"
         >
-          <span className="h-8 w-px bg-accent/50" aria-hidden="true" />
-          Scroll · signal continues
-          <span className="h-8 w-px bg-accent/50" aria-hidden="true" />
+          <span className="h-6 w-px bg-accent/50 sm:h-8" aria-hidden="true" />
+          Scroll · continue
+          <span className="h-6 w-px bg-accent/50 sm:h-8" aria-hidden="true" />
         </a>
       </div>
     </section>

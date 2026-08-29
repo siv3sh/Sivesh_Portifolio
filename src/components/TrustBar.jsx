@@ -96,7 +96,7 @@ export default function TrustBar() {
     <section
       ref={sectionRef}
       id="trust"
-      className="relative overflow-hidden border-y border-border bg-surface px-6 py-20 md:py-28"
+      className="relative overflow-hidden border-y border-border bg-surface px-4 py-16 sm:px-6 sm:py-20 md:py-28"
       aria-label={`Why clients trust ${profile.firstName}`}
     >
       <div className="tech-grid pointer-events-none absolute inset-0 opacity-35" aria-hidden="true" />

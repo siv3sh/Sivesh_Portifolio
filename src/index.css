@@ -44,11 +44,19 @@
 
 html {
   scroll-behavior: auto;
-  scroll-padding-top: 5.5rem;
+  scroll-padding-top: 4.5rem;
+  overflow-x: hidden;
+}
+
+@media (min-width: 640px) {
+  html {
+    scroll-padding-top: 5.5rem;
+  }
 }
 
 body {
   margin: 0;
+  min-width: 0;
   font-family: var(--font-body);
   background-color: var(--color-ink);
   color: var(--color-cream);
@@ -56,6 +64,15 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.5;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
 }
 
 h1,

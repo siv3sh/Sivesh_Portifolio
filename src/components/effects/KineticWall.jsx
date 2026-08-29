@@ -205,21 +205,21 @@ export default function KineticWall() {
   return (
     <section
       ref={rootRef}
-      className="kinetic-wall relative overflow-hidden border-y border-[var(--color-border-strong)] bg-ink px-6 py-16 md:py-20"
+      className="kinetic-wall relative overflow-hidden border-y border-[var(--color-border-strong)] bg-ink px-4 py-14 sm:px-6 sm:py-16 md:py-20"
       aria-label="Kinetic signal wall"
     >
       <div className="tech-grid pointer-events-none absolute inset-0 opacity-50" aria-hidden="true" />
       <div
-        className="pointer-events-none absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-[color-mix(in_oklab,var(--color-accent)_35%,transparent)]"
+        className="pointer-events-none absolute inset-y-0 left-1/2 hidden w-px -translate-x-1/2 bg-[color-mix(in_oklab,var(--color-accent)_35%,transparent)] sm:block"
         aria-hidden="true"
       />
       <div
-        className="pointer-events-none absolute top-1/2 left-0 h-px w-full -translate-y-1/2 bg-[color-mix(in_oklab,var(--color-accent)_25%,transparent)]"
+        className="pointer-events-none absolute top-1/2 left-0 hidden h-px w-full -translate-y-1/2 bg-[color-mix(in_oklab,var(--color-accent)_25%,transparent)] sm:block"
         aria-hidden="true"
       />
 
-      {/* Four quadrant notes */}
-      <div className="pointer-events-none absolute inset-0 z-[1] mx-auto max-w-6xl px-6 py-8 md:py-10">
+      {/* Four quadrant notes — desktop only to avoid crowding mobile */}
+      <div className="pointer-events-none absolute inset-0 z-[1] mx-auto hidden max-w-6xl px-6 py-8 md:block md:py-10">
         <div className="grid h-full min-h-[70vh] grid-cols-2 grid-rows-2 gap-0">
           {QUAD_NOTES.map((note, i) => (
             <div
@@ -247,25 +247,25 @@ export default function KineticWall() {
       </div>
 
       {/* Center composition */}
-      <div className="relative z-10 mx-auto flex min-h-[70vh] w-full max-w-6xl flex-col justify-center py-20">
+      <div className="relative z-10 mx-auto flex min-h-0 w-full max-w-6xl flex-col justify-center py-10 sm:min-h-[50vh] sm:py-16 md:min-h-[70vh] md:py-20">
         <p
           ref={tagRef}
-          className="font-mono-tech text-[11px] tracking-[0.28em] text-accent uppercase opacity-0"
+          className="font-mono-tech text-[10px] tracking-[0.22em] text-accent uppercase opacity-0 sm:text-[11px] sm:tracking-[0.28em]"
         >
           [{brand.monogram} · KINETIC SIGNAL]
         </p>
 
-        <div className="mt-6 space-y-2 md:mt-8 md:space-y-3" style={{ perspective: "900px" }}>
+        <div className="mt-5 space-y-2 sm:mt-6 md:mt-8 md:space-y-3" style={{ perspective: "900px" }}>
           {HEADLINES.map((text, i) => (
             <p
               key={text}
               ref={(el) => {
                 lineRefs.current[i] = el;
               }}
-              className={`font-heading font-medium tracking-[-0.05em] text-cream ${
+              className={`font-heading font-medium tracking-[-0.05em] break-words text-cream ${
                 i === 0
-                  ? "text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl"
-                  : "text-2xl text-cream-muted sm:text-3xl md:text-4xl lg:text-5xl"
+                  ? "text-[1.85rem] leading-[1.05] sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl"
+                  : "text-xl leading-snug text-cream-muted sm:text-3xl md:text-4xl lg:text-5xl"
               }`}
             >
               {text}
@@ -273,29 +273,29 @@ export default function KineticWall() {
           ))}
         </div>
 
-        <div className="mt-10 grid max-w-2xl gap-3 sm:grid-cols-3">
+        <div className="mt-8 grid max-w-2xl gap-2.5 sm:mt-10 sm:grid-cols-3 sm:gap-3">
           {heroStats.slice(0, 3).map((stat, i) => (
             <div
               key={stat.label}
               ref={(el) => {
                 statRefs.current[i] = el;
               }}
-              className="border border-border bg-surface-raised/80 px-4 py-3 opacity-0 backdrop-blur-sm"
+              className="border border-border bg-surface-raised/80 px-3 py-3 opacity-0 backdrop-blur-sm sm:px-4"
             >
               <p
                 data-kw-metric={stat.value}
-                className="font-heading text-2xl font-medium tracking-[-0.03em] text-cream md:text-3xl"
+                className="font-heading text-xl font-medium tracking-[-0.03em] text-cream sm:text-2xl md:text-3xl"
               >
                 {stat.value}
               </p>
-              <p className="mt-1 font-mono-tech text-[10px] tracking-[0.14em] text-muted uppercase">
+              <p className="mt-1 font-mono-tech text-[9px] tracking-[0.12em] text-muted uppercase sm:text-[10px] sm:tracking-[0.14em]">
                 {stat.label}
               </p>
             </div>
           ))}
         </div>
 
-        <div className="mt-10 h-px max-w-md bg-[var(--color-border)]">
+        <div className="mt-8 h-px max-w-md bg-[var(--color-border)] sm:mt-10">
           <div ref={meterRef} className="h-px w-0 bg-accent" />
         </div>
 

@@ -161,16 +161,16 @@ export default function CommandPalette() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="fixed right-4 bottom-4 z-[90] hidden items-center gap-2 border border-[var(--color-border-strong)] bg-ink/95 px-3 py-2 font-mono-tech text-[10px] tracking-[0.16em] text-muted uppercase shadow-sm backdrop-blur md:inline-flex hover:border-accent hover:text-accent"
+        className="fixed right-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-[90] inline-flex items-center gap-2 border border-[var(--color-border-strong)] bg-ink/95 px-3 py-2.5 font-mono-tech text-[10px] tracking-[0.16em] text-muted uppercase shadow-sm backdrop-blur hover:border-accent hover:text-accent md:right-4 md:bottom-4"
         aria-label="Open command palette"
       >
         Command
-        <kbd className="border border-border px-1.5 py-0.5 text-cream">⌘K</kbd>
+        <kbd className="hidden border border-border px-1.5 py-0.5 text-cream sm:inline">⌘K</kbd>
       </button>
 
       {open && (
         <div
-          className="fixed inset-0 z-[350] flex items-start justify-center bg-[color-mix(in_oklab,#0c0f16_55%,transparent)] p-4 pt-[12vh] backdrop-blur-md sm:p-6"
+          className="fixed inset-0 z-[350] flex items-end justify-center bg-[color-mix(in_oklab,#0c0f16_55%,transparent)] p-0 backdrop-blur-md sm:items-start sm:p-6 sm:pt-[12vh]"
           role="presentation"
           onClick={() => setOpen(false)}
         >
@@ -179,7 +179,7 @@ export default function CommandPalette() {
             role="dialog"
             aria-modal="true"
             aria-label="Command palette"
-            className="w-full max-w-xl border border-[var(--color-border-strong)] bg-ink shadow-[0_24px_80px_-28px_rgba(22,24,31,0.55)]"
+            className="max-h-[88svh] w-full overflow-hidden border border-[var(--color-border-strong)] bg-ink shadow-[0_24px_80px_-28px_rgba(22,24,31,0.55)] sm:max-h-none sm:max-w-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="border-b border-border px-4 py-3">
@@ -209,7 +209,7 @@ export default function CommandPalette() {
               />
             </div>
 
-            <ul id={listId} role="listbox" className="max-h-[50vh] overflow-y-auto py-2">
+            <ul id={listId} role="listbox" className="max-h-[min(50vh,22rem)] overflow-y-auto overscroll-contain py-2 sm:max-h-[50vh]">
               {filtered.length === 0 && (
                 <li className="px-4 py-6 font-mono-tech text-[11px] tracking-[0.14em] text-muted uppercase">
                   No matches

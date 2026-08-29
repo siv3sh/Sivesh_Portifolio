@@ -195,13 +195,13 @@ export default function ResumePreview() {
         aria-hidden="true"
       />
 
-      <div className="relative z-[1] p-6 sm:p-8 md:p-10">
-        <header className="resume-reveal grid gap-6 border-b border-[var(--color-border-strong)] pb-8 md:grid-cols-[1fr_auto] md:items-end">
+      <div className="relative z-[1] p-4 sm:p-8 md:p-10">
+        <header className="resume-reveal grid gap-5 border-b border-[var(--color-border-strong)] pb-6 sm:gap-6 sm:pb-8 md:grid-cols-[1fr_auto] md:items-end">
           <div>
             <p className="label-mono bracket text-accent">Curriculum vitae</p>
             <h2
               ref={nameRef}
-              className="mt-3 font-heading text-4xl font-medium tracking-[-0.045em] text-cream sm:text-5xl"
+              className="mt-3 font-heading text-3xl font-medium tracking-[-0.045em] text-cream sm:text-4xl md:text-5xl"
             >
               {doc.name}
             </h2>
@@ -253,7 +253,7 @@ export default function ResumePreview() {
 
         {/* In-preview jump TOC */}
         <nav
-          className="resume-reveal sticky top-1 z-20 mt-6 flex flex-wrap gap-2 border border-border bg-ink/95 p-2 backdrop-blur-sm"
+          className="resume-reveal sticky top-1 z-20 mt-5 -mx-1 flex gap-2 overflow-x-auto border border-border bg-ink/95 p-2 backdrop-blur-sm [-ms-overflow-style:none] [scrollbar-width:none] sm:mx-0 sm:mt-6 sm:flex-wrap [&::-webkit-scrollbar]:hidden"
           aria-label="Resume sections"
         >
           {TOC.map((item) => (
@@ -261,7 +261,7 @@ export default function ResumePreview() {
               key={item.id}
               type="button"
               onClick={() => jumpTo(item.id)}
-              className="border border-transparent px-2.5 py-1.5 font-mono-tech text-[10px] tracking-[0.14em] text-muted uppercase transition-colors hover:border-accent hover:text-accent"
+              className="shrink-0 border border-transparent px-2.5 py-2 font-mono-tech text-[10px] tracking-[0.14em] text-muted uppercase transition-colors hover:border-accent hover:text-accent"
             >
               {item.label}
             </button>
