@@ -382,8 +382,8 @@ h4 {
   display: block;
   width: 100%;
   height: auto;
-  background: #0a0a0a;
-  object-fit: cover;
+  background: transparent;
+  object-fit: contain;
   object-position: center top;
 }
 
