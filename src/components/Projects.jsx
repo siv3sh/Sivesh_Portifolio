@@ -24,7 +24,7 @@ function ProjectCard({ project, index }) {
                 {String(index + 1).padStart(2, "0")}
               </span>
               {project.featured && (
-                <span className="shrink-0 rounded-full border border-cream/15 bg-cream/[0.04] px-3 py-1 font-mono-tech text-[10px] tracking-widest text-cream-muted uppercase">
+                <span className="shrink-0 border border-border bg-surface px-3 py-1 font-mono-tech text-[10px] tracking-widest text-muted uppercase">
                   Featured
                 </span>
               )}
@@ -34,7 +34,7 @@ function ProjectCard({ project, index }) {
               {project.stack.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-md border border-cream/10 bg-cream/[0.03] px-2.5 py-1 font-mono-tech text-[10px] tracking-wider text-cream-muted uppercase"
+                  className="border border-border bg-surface px-2.5 py-1 font-mono-tech text-[10px] tracking-wider text-muted uppercase"
                 >
                   {tag}
                 </span>
@@ -46,7 +46,7 @@ function ProjectCard({ project, index }) {
             </h3>
 
             {project.problem && (
-              <p className="mt-4 rounded-lg border border-cream/8 bg-cream/[0.03] px-4 py-3 text-sm leading-relaxed text-cream-muted">
+              <p className="mt-4 border border-border bg-surface px-4 py-3 text-sm leading-relaxed text-cream-muted">
                 <span className="font-mono-tech text-[10px] tracking-widest text-muted uppercase">
                   The challenge ·{" "}
                 </span>
@@ -63,10 +63,10 @@ function ProjectCard({ project, index }) {
               {project.metrics.map((metric) => (
                 <div
                   key={metric}
-                  className="flex items-center gap-3 rounded-lg border border-cream/8 bg-cream/[0.03] px-4 py-3"
+                  className="flex items-center gap-3 border-t border-border py-3 sm:pr-6"
                 >
-                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-cream-muted" />
-                  <span className="text-sm text-cream-muted">{metric}</span>
+                  <span className="h-1 w-1 shrink-0 bg-accent" aria-hidden="true" />
+                  <span className="text-sm text-muted">{metric}</span>
                 </div>
               ))}
             </div>

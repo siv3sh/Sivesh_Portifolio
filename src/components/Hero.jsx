@@ -53,14 +53,6 @@ export default function Hero() {
         delay: 0.06,
       });
 
-      gsap.from(".hero-portrait", {
-        opacity: 0,
-        x: 28,
-        duration: 1,
-        ease: "power3.out",
-        delay: 0.12,
-      });
-
       if (statsRef.current) {
         gsap.from(".hero-stat", {
           y: 18,
@@ -82,104 +74,110 @@ export default function Hero() {
 
   return (
     <section id="hero" ref={sectionRef} className="hero-section relative overflow-hidden">
-      <div className="hero-ambient pointer-events-none absolute inset-0 z-0" aria-hidden="true" />
+      <div className="tech-grid pointer-events-none absolute inset-0 -z-10" aria-hidden="true" />
 
-      <div className="relative z-10 mx-auto flex min-h-[100dvh] w-full max-w-6xl flex-col justify-center px-5 pt-28 pb-16 sm:px-8 lg:px-10">
-        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-8 xl:gap-12">
-          <div className="hero-copy order-2 text-left lg:order-1">
-            <p className="hero-reveal hero-greeting">{heroCopy.greeting}</p>
+      <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-14 px-6 pt-36 pb-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16 lg:pt-44 lg:pb-24">
+        <div className="order-2 lg:order-1">
+          <p className="hero-reveal label-mono bracket">{heroCopy.greeting}</p>
 
-            <h1 className="hero-reveal">
-              <span className="hero-name block">
-                {profile.firstName}{" "}
-                <span className="sr-only">{profile.lastName}</span>
-              </span>
-              <span className="hero-role mt-1 block">{profile.role}</span>
-            </h1>
+          <h1 className="hero-reveal mt-4">
+            <span className="block font-heading text-5xl leading-[0.92] font-medium tracking-[-0.04em] text-cream sm:text-6xl lg:text-7xl">
+              {profile.fullName}
+            </span>
+            <span className="mt-4 block font-mono-tech text-[12px] tracking-[0.32em] text-accent uppercase">
+              {profile.role}
+            </span>
+          </h1>
 
-            <div className="hero-reveal hero-rule-row mt-6 flex items-start gap-4 sm:mt-8">
-              <span className="hero-rule mt-3" aria-hidden="true" />
-              <div className="space-y-1">
-                {heroCopy.lines.map((line) => (
-                  <p key={line} className="hero-support">
-                    {line}
-                  </p>
-                ))}
-              </div>
-            </div>
-
-            <p className="hero-reveal mt-6 max-w-xl text-base leading-relaxed text-cream-muted sm:text-lg">
-              {profile.tagline}
-            </p>
-
-            <div className="hero-reveal mt-5 inline-flex items-center gap-2 text-sm text-muted">
-              <span className="brand-status-dot" aria-hidden="true" />
-              {profile.availability}
-            </div>
-
-            <div className="hero-reveal mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <a href="#contact" className="btn-neon rounded-xl px-8 py-3.5 text-center text-sm sm:px-10 sm:py-4">
-                Book a free discovery call
-              </a>
-              <a href="#projects" className="btn-ghost rounded-xl px-8 py-3.5 text-center text-sm sm:px-10 sm:py-4">
-                View my work
-              </a>
-            </div>
-
-            <div className="hero-reveal mt-8 flex items-center gap-3">
-              {socialLinks.map((link) => {
-                const Icon = iconMap[link.label];
-                return (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    target={link.label !== "Email" ? "_blank" : undefined}
-                    rel={link.label !== "Email" ? "noopener noreferrer" : undefined}
-                    aria-label={link.label}
-                    className="hero-social glass flex h-11 w-11 items-center justify-center rounded-full text-cream-muted"
-                  >
-                    <Icon />
-                  </a>
-                );
-              })}
+          <div className="hero-reveal mt-8 flex items-start gap-5">
+            <span className="crosshair mt-3 shrink-0" aria-hidden="true" />
+            <div className="space-y-1">
+              {heroCopy.lines.map((line) => (
+                <p
+                  key={line}
+                  className="font-heading text-xl leading-[1.35] font-medium tracking-[-0.02em] text-cream/90 sm:text-2xl"
+                >
+                  {line}
+                </p>
+              ))}
             </div>
           </div>
 
-          <div className="hero-reveal hero-portrait-wrap order-1 flex justify-center lg:order-2 lg:justify-end">
-            <div className="hero-portrait relative">
-              <div className="hero-portrait-glow" aria-hidden="true" />
-              <img
-                src="/sivesh-portrait.png?v=6"
-                alt={`${profile.fullName}, ${profile.role}`}
-                className="hero-portrait-img relative z-[1]"
-                width={666}
-                height={983}
-                decoding="async"
-                fetchPriority="high"
-              />
-              <div className="hero-portrait-fade" aria-hidden="true" />
-            </div>
+          <p className="hero-reveal mt-6 max-w-xl text-base leading-relaxed text-cream-muted sm:text-lg">
+            {profile.tagline}
+          </p>
+
+          <div className="hero-reveal mt-6 inline-flex items-center gap-2.5 border border-border px-3 py-2 font-mono-tech text-[11px] tracking-[0.14em] text-muted uppercase">
+            <span className="signal-dot" aria-hidden="true" />
+            {profile.availability}
+          </div>
+
+          <div className="hero-reveal mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <a href="#contact" className="btn-neon px-8 py-3.5 text-center sm:px-10 sm:py-4">
+              Book a free discovery call
+            </a>
+            <a href="#projects" className="btn-ghost px-8 py-3.5 text-center sm:px-10 sm:py-4">
+              View my work
+            </a>
+          </div>
+
+          <div className="hero-reveal mt-8 flex items-center gap-3">
+            {socialLinks.map((link) => {
+              const Icon = iconMap[link.label];
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target={link.label !== "Email" ? "_blank" : undefined}
+                  rel={link.label !== "Email" ? "noopener noreferrer" : undefined}
+                  aria-label={link.label}
+                  className="flex h-11 w-11 items-center justify-center border border-border text-cream-muted transition-colors hover:border-accent hover:text-accent"
+                >
+                  <Icon />
+                </a>
+              );
+            })}
           </div>
         </div>
 
-        <div className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-muted/70 sm:flex">
-          <span className="font-mono-tech text-[10px] tracking-[0.25em] uppercase">Scroll</span>
-          <div className="brand-scroll-indicator">
-            <div className="brand-scroll-dot" />
+        <div className="hero-reveal order-1 flex justify-center lg:order-2 lg:justify-end">
+          <div className="hero-portrait-frame relative mx-auto w-full max-w-md lg:ml-auto">
+            <div className="absolute -inset-3 border border-border" aria-hidden="true">
+              <div className="corner-frame absolute inset-0" />
+              <div className="corner-frame-alt absolute inset-0" />
+            </div>
+            <img
+              src="/sivesh-portrait.png?v=7"
+              alt={`${profile.fullName}, ${profile.role}`}
+              className="hero-portrait-img relative"
+              width={682}
+              height={1024}
+              decoding="async"
+              fetchPriority="high"
+            />
+            <div className="scanlines pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
           </div>
         </div>
       </div>
 
-      <div ref={statsRef} className="relative z-10 mx-auto w-full max-w-6xl px-5 pb-20 sm:px-8 lg:px-10 lg:pb-28">
-        <div className="section-line mb-10 opacity-60" />
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+      <div ref={statsRef} className="relative z-10 mx-auto w-full max-w-6xl px-6 pb-20">
+        <div className="rule-strong" />
+        <dl className="grid grid-cols-2 sm:grid-cols-4">
           {heroStats.map((stat) => (
-            <div key={stat.label} className="hero-stat brand-stat-card rounded-xl px-4 py-5 sm:px-5">
-              <p className="font-heading text-2xl font-semibold text-cream sm:text-3xl">{stat.value}</p>
-              <p className="mt-1.5 text-[11px] leading-snug text-muted sm:text-xs">{stat.label}</p>
+            <div
+              key={stat.label}
+              className="hero-stat border-b border-[var(--color-border-strong)] px-1 py-7 sm:border-b-0 sm:border-r sm:px-6 sm:first:pl-0 sm:last:border-r-0"
+            >
+              <dt className="font-heading text-4xl leading-none font-medium tracking-[-0.03em] text-cream">
+                {stat.value}
+              </dt>
+              <dd className="mt-2.5 font-mono-tech text-[10px] leading-snug tracking-[0.12em] text-muted uppercase">
+                {stat.label}
+              </dd>
             </div>
           ))}
-        </div>
+        </dl>
+        <div className="rule-strong" />
       </div>
     </section>
   );

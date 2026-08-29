@@ -1,13 +1,11 @@
 import { useState, useEffect } from "react";
 import { navLinks, profile } from "../data/content";
-import { useActiveSection } from "../hooks/useActiveSection";
-import { BrandMark, BrandWordmark } from "./brand";
+import { brand } from "../data/brand";
 
 function scrollToSection(href, onDone) {
   const id = href.replace("#", "");
   const el = document.getElementById(id);
   if (!el) return;
-
   el.scrollIntoView({ behavior: "smooth", block: "start" });
   onDone?.();
 }
@@ -15,20 +13,36 @@ function scrollToSection(href, onDone) {
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const active = useActiveSection(navLinks.map((l) => l.id));
+  const [active, setActive] = useState("");
 
   useEffect(() => {
-    const updateScrolled = (scrollY) => {
-      const next = scrollY > 24;
+    const onScroll = () => {
+      const next = window.scrollY > 24;
       setScrolled((prev) => (prev === next ? prev : next));
     };
-
-    const onScroll = () => updateScrolled(window.scrollY);
-
     window.addEventListener("scroll", onScroll, { passive: true });
-    updateScrolled(window.scrollY);
-
+    onScroll();
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const sections = navLinks
+      .map((l) => document.getElementById(l.id))
+      .filter((el) => Boolean(el));
+    if (!sections.length) return;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) setActive(visible.target.id);
+      },
+      { rootMargin: "-30% 0px -55% 0px", threshold: [0.05, 0.25, 0.5] }
+    );
+
+    sections.forEach((s) => io.observe(s));
+    return () => io.disconnect();
   }, []);
 
   const handleNav = (e, href) => {
@@ -38,42 +52,46 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-        scrolled ? "glass-strong shadow-lg shadow-black/20" : ""
+      className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
+        scrolled
+          ? "border-b border-[var(--color-border-strong)] bg-ink/90 backdrop-blur-md"
+          : "border-b border-transparent"
       }`}
     >
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-5">
         <a
           href="#hero"
           onClick={(e) => handleNav(e, "#hero")}
-          className="brand-lockup group flex items-center gap-2.5"
+          className="group flex items-center gap-3"
           aria-label={`${profile.fullName} — back to top`}
         >
-          <BrandMark
-            size="md"
-            className="brand-mark-glow transition-transform duration-300 group-hover:scale-110"
-          />
-          <span className="hidden sm:inline">
-            <BrandWordmark showTag showDescriptor />
+          <span className="flex h-9 w-9 items-center justify-center border border-[var(--color-border-strong)] font-mono-tech text-[10px] tracking-[0.12em] text-accent">
+            {brand.monogram}
+          </span>
+          <span className="hidden leading-none sm:block">
+            <span className="block font-heading text-lg font-medium tracking-[-0.03em] text-cream">
+              {brand.fullName}
+            </span>
+            <span className="mt-0.5 block font-mono-tech text-[9px] tracking-[0.16em] text-muted uppercase">
+              {brand.descriptor}
+            </span>
           </span>
         </a>
 
-        <ul className="hidden items-center gap-1 md:flex">
+        <ul className="hidden items-center gap-6 md:flex">
           {navLinks.map((link) => (
             <li key={link.href}>
               <a
                 href={link.href}
                 onClick={(e) => handleNav(e, link.href)}
-                className={`relative rounded-lg px-4 py-2 text-sm transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                aria-current={active === link.id ? "true" : undefined}
+                className={`border-b py-1 font-mono-tech text-[11px] tracking-[0.18em] uppercase transition-colors ${
                   active === link.id
-                    ? "text-cream"
-                    : "text-cream-muted hover:text-cream"
+                    ? "border-accent text-accent"
+                    : "border-transparent text-muted hover:text-accent"
                 }`}
               >
                 {link.label}
-                {active === link.id && (
-                  <span className="absolute inset-x-2 -bottom-0.5 h-px bg-gradient-to-r from-transparent via-cream-muted to-transparent" />
-                )}
               </a>
             </li>
           ))}
@@ -82,7 +100,7 @@ export default function Navbar() {
         <a
           href="#contact"
           onClick={(e) => handleNav(e, "#contact")}
-          className="btn-neon hidden rounded-lg px-5 py-2 text-sm md:inline-flex"
+          className="btn-neon hidden px-5 py-2.5 md:inline-flex"
         >
           Hire {profile.firstName}
         </a>
@@ -91,7 +109,7 @@ export default function Navbar() {
           type="button"
           aria-label="Toggle menu"
           aria-expanded={open}
-          className="relative flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-lg border border-accent/20 bg-accent/5 md:hidden"
+          className="relative flex h-10 w-10 flex-col items-center justify-center gap-1.5 border border-border md:hidden"
           onClick={() => setOpen(!open)}
         >
           <span
@@ -111,19 +129,16 @@ export default function Navbar() {
           open ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <ul className="glass border-t border-accent/10 px-6 py-4">
+        <ul className="border-t border-border bg-ink px-6 py-4">
           {navLinks.map((link) => (
             <li key={link.href}>
               <a
                 href={link.href}
                 onClick={(e) => handleNav(e, link.href)}
-                className={`block py-3 text-sm transition-colors ${
-                  active === link.id ? "text-accent" : "text-cream-muted"
+                className={`block py-3 font-mono-tech text-[11px] tracking-[0.18em] uppercase transition-colors ${
+                  active === link.id ? "text-accent" : "text-muted"
                 }`}
               >
-                <span className="font-mono-tech mr-3 text-xs text-accent-2/60">
-                  //
-                </span>
                 {link.label}
               </a>
             </li>
@@ -132,7 +147,7 @@ export default function Navbar() {
             <a
               href="#contact"
               onClick={(e) => handleNav(e, "#contact")}
-              className="btn-neon block rounded-lg py-3 text-center text-sm"
+              className="btn-neon block py-3 text-center"
             >
               Hire {profile.firstName}
             </a>

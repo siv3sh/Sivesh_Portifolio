@@ -17,7 +17,7 @@ function SkillCard({ category, index }) {
         <div className="gradient-border w-full">
           <div className="gradient-border-inner p-6 md:p-8">
             <div className="mb-5 flex items-center gap-3">
-              <span className="flex h-12 w-12 items-center justify-center rounded-lg border border-cream/10 bg-cream/[0.03] text-xl text-cream-muted">
+              <span className="flex h-12 w-12 items-center justify-center border border-border text-xl text-accent">
                 {category.icon}
               </span>
               <div>

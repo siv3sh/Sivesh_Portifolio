@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { sectionMeta } from "../data/content";
-import { BrandMark } from "./brand";
 
 export default function SectionHeading({ sectionKey, title, subtitle }) {
   const ref = useRef(null);
@@ -32,24 +31,19 @@ export default function SectionHeading({ sectionKey, title, subtitle }) {
   }, []);
 
   return (
-    <div ref={ref} className="mb-14 md:mb-20">
-      <div data-heading-part className="mb-6 flex items-center gap-3 sm:gap-4">
-        <span className="font-mono-tech text-sm font-semibold tracking-widest text-muted">
-          {meta?.num}
-        </span>
-        <div className="section-line min-w-8 flex-1" />
-        <BrandMark size="sm" className="opacity-80" />
-        <div className="section-line min-w-8 flex-1" />
-        <span className="font-mono-tech text-xs tracking-[0.25em] text-muted uppercase">
-          {meta?.label}
-        </span>
+    <div ref={ref} className="mb-14 max-w-2xl md:mb-20">
+      <div data-heading-part className="flex items-center gap-4">
+        <span className="crosshair shrink-0" aria-hidden="true" />
+        <span className="label-mono text-accent">{meta?.num}</span>
+        <span className="rule-strong max-w-16 flex-1" />
+        <span className="label-mono bracket">{meta?.label}</span>
       </div>
 
       <h2
         data-heading-part
-        className="font-heading text-4xl font-extrabold tracking-tight md:text-5xl lg:text-6xl"
+        className="mt-6 font-heading text-[2rem] leading-[1.05] font-medium tracking-[-0.035em] text-cream md:text-[2.75rem]"
       >
-        <span className="text-gradient">{title}</span>
+        {title}
       </h2>
 
       {subtitle && (

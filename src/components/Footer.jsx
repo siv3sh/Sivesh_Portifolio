@@ -30,7 +30,7 @@ export default function Footer() {
           <a
             href="#hero"
             onClick={scrollToTop}
-            className="btn-ghost rounded-lg px-6 py-2.5 font-mono-tech text-xs tracking-widest uppercase"
+            className="btn-ghost px-6 py-2.5"
           >
             ↑ Back to Top
           </a>

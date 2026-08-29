@@ -7,13 +7,15 @@ function TrustCard({ pillar, index }) {
   return (
     <div
       ref={ref}
-      className={`reveal interactive-card glass rounded-xl p-5 md:p-6 ${visible ? "is-visible" : ""}`}
+      className={`reveal interactive-card glass border border-border p-5 md:p-6 ${visible ? "is-visible" : ""}`}
       style={{ transitionDelay: visible ? `${index * 60}ms` : "0ms" }}
     >
-      <span className="flex h-10 w-10 items-center justify-center rounded-lg border border-cream/10 bg-cream/[0.03] text-lg text-cream-muted">
+      <span className="flex h-10 w-10 items-center justify-center border border-border text-lg text-accent">
         {pillar.icon}
       </span>
-      <h3 className="mt-4 font-heading text-lg font-bold text-cream">{pillar.title}</h3>
+      <h3 className="mt-4 font-heading text-lg font-medium tracking-[-0.03em] text-cream">
+        {pillar.title}
+      </h3>
       <p className="mt-2 text-sm leading-relaxed text-cream-muted">{pillar.description}</p>
     </div>
   );
@@ -26,10 +28,10 @@ export default function TrustBar() {
     <section className="relative px-6 py-16 md:py-20" aria-label="Why clients trust this work">
       <div className="mx-auto max-w-6xl">
         <div ref={ref} className={`reveal mb-10 text-center md:mb-12 ${visible ? "is-visible" : ""}`}>
-          <p className="font-mono-tech text-xs tracking-[0.25em] text-muted uppercase">
+          <p className="label-mono bracket justify-center">
             Why clients trust {profile.firstName}
           </p>
-          <h2 className="mt-3 font-heading text-3xl font-bold text-cream md:text-4xl">
+          <h2 className="mt-3 font-heading text-3xl font-medium tracking-[-0.035em] text-cream md:text-4xl">
             Work with {profile.fullName}
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-cream-muted">

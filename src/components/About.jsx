@@ -120,7 +120,7 @@ export default function About() {
               {aboutHighlights.map((item, i) => (
                 <li
                   key={i}
-                  className="about-highlight group glass interactive-card flex gap-4 rounded-xl p-4 hover:border-cream/15"
+                  className="about-highlight group glass interactive-card flex gap-4 border border-border p-4 hover:border-accent"
                 >
                   <span className="mt-0.5 shrink-0 text-accent">✓</span>
                   <span className="text-sm leading-relaxed text-cream-muted transition-colors group-hover:text-cream sm:text-base">

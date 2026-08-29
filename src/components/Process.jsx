@@ -15,7 +15,7 @@ function ProcessStep({ step, index }) {
         <div className="gradient-border-inner flex h-full flex-col p-6 md:p-7">
           <div className="flex items-start justify-between gap-4">
             <span className="font-mono-tech text-3xl font-bold text-cream/15">{step.step}</span>
-            <span className="shrink-0 rounded-full border border-cream/12 bg-cream/[0.03] px-3 py-1 font-mono-tech text-[10px] tracking-wider text-muted uppercase">
+            <span className="shrink-0 border border-border px-3 py-1 font-mono-tech text-[10px] tracking-wider text-muted uppercase">
               {step.duration}
             </span>
           </div>
@@ -51,7 +51,7 @@ export default function Process() {
 
         <div
           ref={ref}
-          className={`reveal mt-12 rounded-2xl border border-cream/10 bg-cream/[0.03] p-6 md:mt-16 md:p-8 ${
+          className={`reveal mt-12 border border-border bg-surface-raised p-6 md:mt-16 md:p-8 ${
             visible ? "is-visible" : ""
           }`}
         >
@@ -67,9 +67,9 @@ export default function Process() {
             ))}
           </ul>
           <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
-            <a href="#contact" className="btn-neon rounded-xl px-8 py-3.5 text-center text-sm">
-              Book a free discovery call
-            </a>
+                <a href="#contact" className="btn-neon px-8 py-3.5 text-center">
+                  Book a free discovery call
+                </a>
             <p className="text-sm text-muted">No commitment. Clear yes/no on fit.</p>
           </div>
         </div>

@@ -34,12 +34,12 @@ export default function CtaBand() {
                 feedback on scope, timeline, and fit.
               </p>
               <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <a href="#contact" className="btn-neon w-full rounded-xl px-10 py-4 text-sm sm:w-auto">
+                <a href="#contact" className="btn-neon w-full px-10 py-4 sm:w-auto">
                   Start a conversation
                 </a>
                 <a
                   href="mailto:hello@sivesh-pb.com"
-                  className="btn-ghost w-full rounded-xl px-10 py-4 text-sm sm:w-auto"
+                  className="btn-ghost w-full px-10 py-4 sm:w-auto"
                 >
                   Email directly
                 </a>

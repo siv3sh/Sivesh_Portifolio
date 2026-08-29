@@ -73,7 +73,7 @@ export default function Experience() {
           >
             <div
               ref={lineFillRef}
-              className="h-full w-full origin-top bg-gradient-to-b from-accent via-accent-2 to-accent shadow-[0_0_12px_rgba(168,144,108,0.35)]"
+              className="h-full w-full origin-top bg-accent"
               style={{ transform: "scaleY(0)" }}
             />
           </div>
@@ -87,7 +87,7 @@ export default function Experience() {
                 }`}
               >
                 <div className="absolute left-4 top-8 z-10 flex h-3 w-3 -translate-x-1/2 items-center justify-center md:left-1/2">
-                  <span className="relative h-3 w-3 rounded-full border-2 border-accent bg-ink shadow-[0_0_12px_rgba(168,144,108,0.6)]" />
+                  <span className="relative h-3 w-3 border-2 border-accent bg-ink" />
                 </div>
 
                 <div className={`w-full pl-12 md:w-1/2 md:pl-0 ${i % 2 === 0 ? "md:pr-16" : "md:pl-16"}`}>
