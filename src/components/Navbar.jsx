@@ -108,6 +108,15 @@ export default function Navbar() {
         </ul>
 
         <div className="hidden items-center gap-3 md:flex">
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event("open-command-palette"))}
+            className="inline-flex items-center gap-1.5 border border-border px-2.5 py-1.5 font-mono-tech text-[10px] tracking-[0.14em] text-muted uppercase transition-colors hover:border-accent hover:text-accent"
+            aria-label="Open command palette"
+            title="Command palette"
+          >
+            <kbd className="text-cream">⌘K</kbd>
+          </button>
           <ResumeActions variant="nav" />
           <a
             href="#contact"

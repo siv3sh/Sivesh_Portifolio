@@ -1,4 +1,4 @@
-import { BrandMark, BrandRule, BrandWordmark } from "./brand";
+import { BrandMark, BrandWordmark } from "./brand";
 import { brand } from "../data/brand";
 
 function scrollToTop(e) {
@@ -14,7 +14,7 @@ export default function Footer() {
       <div className="section-line absolute inset-x-0 top-0" />
 
       <div className="mx-auto max-w-6xl">
-        <BrandRule className="mb-10 max-w-md mx-auto" />
+        <div className="rule-strong mx-auto mb-10 max-w-md" aria-hidden="true" />
 
         <div className="flex flex-col items-center justify-between gap-8 sm:flex-row">
           <div className="flex items-center gap-4">
