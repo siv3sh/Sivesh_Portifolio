@@ -1,6 +1,6 @@
 import { useEffect, useId, useState } from "react";
 import { createPortal } from "react-dom";
-import { animate, stagger } from "animejs";
+import { animate } from "animejs";
 import { resume } from "../data/content";
 import { prefersReducedMotion } from "../lib/animeMotion";
 import ResumePreview from "./ResumePreview";
@@ -29,32 +29,13 @@ export default function ResumeActions({ className = "", variant = "default" }) {
     window.addEventListener("keydown", onKey);
 
     const id = requestAnimationFrame(() => {
-      const sheet = document.querySelector(".resume-sheet");
-      const parts = document.querySelectorAll(".resume-reveal");
-      if (!sheet) return;
-
-      if (prefersReducedMotion()) {
-        animate([sheet, ...parts], { opacity: 1, y: 0, duration: 1 });
-        return;
-      }
-
-      animate(sheet, {
+      const overlay = document.querySelector(".resume-overlay");
+      if (!overlay || prefersReducedMotion()) return;
+      animate(overlay, {
         opacity: [0, 1],
-        y: [28, 0],
-        scale: [0.985, 1],
-        ease: "outExpo",
-        duration: 700,
+        duration: 320,
+        ease: "outQuad",
       });
-
-      if (parts.length) {
-        animate(parts, {
-          opacity: [0, 1],
-          y: [18, 0],
-          ease: "outExpo",
-          duration: 650,
-          delay: stagger(55, { start: 120 }),
-        });
-      }
     });
 
     return () => {
@@ -72,7 +53,7 @@ export default function ResumeActions({ className = "", variant = "default" }) {
     open &&
     createPortal(
       <div
-        className="resume-overlay fixed inset-0 z-[300] flex items-start justify-center overflow-y-auto p-3 sm:p-6 md:p-8"
+        className="resume-overlay fixed inset-0 z-[300] flex items-start justify-center overflow-y-auto bg-[color-mix(in_oklab,#0c0f16_58%,transparent)] p-3 backdrop-blur-md sm:p-6 md:p-8"
         role="presentation"
         onClick={() => setOpen(false)}
       >
@@ -92,7 +73,7 @@ export default function ResumeActions({ className = "", variant = "default" }) {
                 Resume · live preview
               </p>
               <p className="font-mono-tech text-[10px] tracking-[0.14em] text-muted uppercase">
-                Designed view · PDF download available
+                Boot · scan · jump sections · download PDF
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">

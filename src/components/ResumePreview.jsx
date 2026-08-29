@@ -1,4 +1,16 @@
+import { useEffect, useRef, useState } from "react";
+import { animate, createTimeline, scrambleText, stagger } from "animejs";
 import { resumeDoc } from "../data/resume";
+import { prefersReducedMotion } from "../lib/animeMotion";
+import { copyText, useToast } from "./Toast";
+
+const TOC = [
+  { id: "rv-edu", label: "Education" },
+  { id: "rv-skills", label: "Skills" },
+  { id: "rv-wins", label: "Wins" },
+  { id: "rv-exp", label: "Experience" },
+  { id: "rv-systems", label: "Systems" },
+];
 
 function SectionLabel({ num, children }) {
   return (
@@ -13,24 +25,184 @@ function SectionLabel({ num, children }) {
   );
 }
 
-/** Creative in-site resume surface — not a raw PDF iframe. */
+/** Creative in-site resume — boot sequence, TOC jumps, reading progress. */
 export default function ResumePreview() {
   const doc = resumeDoc;
+  const sheetRef = useRef(null);
+  const nameRef = useRef(null);
+  const progressRef = useRef(null);
+  const [booting, setBooting] = useState(!prefersReducedMotion());
+  const [bootLine, setBootLine] = useState("MOUNT · RESUME SURFACE");
+  const { push } = useToast();
+
+  useEffect(() => {
+    if (!booting) return undefined;
+    const lines = [
+      "MOUNT · RESUME SURFACE",
+      "LOAD · EXPERIENCE / SKILLS",
+      "SYNC · SIGNAL WINS",
+      "READY · PREVIEW ONLINE",
+    ];
+    let i = 0;
+    const tick = window.setInterval(() => {
+      i += 1;
+      if (i >= lines.length) {
+        window.clearInterval(tick);
+        setBooting(false);
+        return;
+      }
+      setBootLine(lines[i]);
+    }, 320);
+    return () => window.clearInterval(tick);
+  }, [booting]);
+
+  useEffect(() => {
+    if (booting) return undefined;
+    const sheet = sheetRef.current;
+    if (!sheet) return undefined;
+
+    const parts = sheet.querySelectorAll(".resume-reveal");
+    const chips = sheet.querySelectorAll("[data-resume-chip]");
+
+    if (prefersReducedMotion()) {
+      animate([sheet, ...parts, ...chips], { opacity: 1, y: 0, duration: 1 });
+      return undefined;
+    }
+
+    const tl = createTimeline({ defaults: { ease: "outExpo" } });
+    tl.add(sheet, {
+      opacity: [0, 1],
+      y: [24, 0],
+      scale: [0.985, 1],
+      duration: 700,
+    });
+    tl.add(
+      parts,
+      {
+        opacity: [0, 1],
+        y: [16, 0],
+        duration: 600,
+        delay: stagger(50),
+      },
+      "-=420"
+    );
+    if (chips.length) {
+      tl.add(
+        chips,
+        {
+          opacity: [0, 1],
+          scale: [0.9, 1],
+          duration: 420,
+          delay: stagger(18),
+        },
+        "-=350"
+      );
+    }
+
+    if (nameRef.current) {
+      animate(nameRef.current, {
+        text: scrambleText({
+          chars: "uppercase",
+          from: "left",
+          cursor: false,
+        }),
+        duration: 900,
+        ease: "outExpo",
+        delay: 120,
+      });
+    }
+
+    const scan = sheet.querySelector("[data-resume-scan]");
+    if (scan) {
+      animate(scan, {
+        top: ["0%", "100%"],
+        opacity: [0, 0.7, 0],
+        duration: 1400,
+        ease: "inOut(2)",
+      });
+    }
+
+    return () => {
+      tl.pause();
+      tl.cancel?.();
+    };
+  }, [booting]);
+
+  useEffect(() => {
+    if (booting) return undefined;
+    const modal = sheetRef.current?.closest(".resume-modal")?.parentElement;
+    const bar = progressRef.current;
+    if (!modal || !bar) return undefined;
+
+    const onScroll = () => {
+      const max = modal.scrollHeight - modal.clientHeight;
+      const p = max > 0 ? modal.scrollTop / max : 0;
+      bar.style.transform = `scaleX(${Math.min(1, Math.max(0, p))})`;
+    };
+    modal.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => modal.removeEventListener("scroll", onScroll);
+  }, [booting]);
+
+  const jumpTo = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  const handleCopyEmail = async () => {
+    try {
+      await copyText(doc.email);
+      push("Email copied", "accent");
+    } catch {
+      push("Could not copy email");
+    }
+  };
+
+  if (booting) {
+    return (
+      <div className="flex min-h-[50vh] items-center justify-center border border-[var(--color-border-strong)] bg-[#0c0f16] p-10">
+        <div className="w-full max-w-md">
+          <p className="font-mono-tech text-[11px] tracking-[0.22em] text-accent uppercase">
+            [SPB · RESUME BOOT]
+          </p>
+          <p className="mt-4 font-heading text-2xl tracking-[-0.03em] text-[#f7f8fa]">{bootLine}</p>
+          <div className="mt-6 h-px bg-white/10">
+            <div className="h-px w-2/3 animate-pulse bg-accent" />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <article className="resume-sheet relative overflow-hidden border border-[var(--color-border-strong)] bg-[#fbfcfd] opacity-0">
+    <article
+      ref={sheetRef}
+      className="resume-sheet relative overflow-hidden border border-[var(--color-border-strong)] bg-[#fbfcfd] opacity-0"
+    >
+      <div
+        ref={progressRef}
+        className="pointer-events-none sticky top-0 z-30 h-0.5 origin-left scale-x-0 bg-accent"
+        aria-hidden="true"
+      />
+
       <div className="tech-grid pointer-events-none absolute inset-0 opacity-60" aria-hidden="true" />
       <div className="pointer-events-none absolute inset-3 border border-border/80" aria-hidden="true">
         <div className="corner-frame absolute inset-0" />
         <div className="corner-frame-alt absolute inset-0" />
       </div>
+      <div
+        data-resume-scan
+        className="pointer-events-none absolute inset-x-0 top-0 z-20 h-px bg-gradient-to-r from-transparent via-accent to-transparent opacity-0"
+        aria-hidden="true"
+      />
 
       <div className="relative z-[1] p-6 sm:p-8 md:p-10">
-        {/* Masthead */}
         <header className="resume-reveal grid gap-6 border-b border-[var(--color-border-strong)] pb-8 md:grid-cols-[1fr_auto] md:items-end">
           <div>
             <p className="label-mono bracket text-accent">Curriculum vitae</p>
-            <h2 className="mt-3 font-heading text-4xl font-medium tracking-[-0.045em] text-cream sm:text-5xl">
+            <h2
+              ref={nameRef}
+              className="mt-3 font-heading text-4xl font-medium tracking-[-0.045em] text-cream sm:text-5xl"
+            >
               {doc.name}
             </h2>
             <p className="mt-2 font-mono-tech text-[12px] tracking-[0.28em] text-accent uppercase">
@@ -47,19 +219,24 @@ export default function ResumePreview() {
               <img
                 src="/sivesh-portrait.png?v=9"
                 alt=""
-                className="relative h-24 w-20 object-cover object-top bg-ink sm:h-28 sm:w-24"
+                className="relative h-24 w-20 bg-ink object-cover object-top sm:h-28 sm:w-24"
               />
               <div className="scanlines pointer-events-none absolute inset-0 opacity-30" aria-hidden="true" />
             </div>
             <div className="mt-2 space-y-1 text-left font-mono-tech text-[10px] tracking-[0.12em] text-muted uppercase md:text-right">
               <p>{doc.phone}</p>
-              <p>{doc.email}</p>
+              <button
+                type="button"
+                onClick={handleCopyEmail}
+                className="block transition-colors hover:text-accent"
+              >
+                {doc.email} · copy
+              </button>
               <p>{doc.web}</p>
             </div>
           </div>
         </header>
 
-        {/* Contact strip */}
         <div className="resume-reveal mt-5 flex flex-wrap gap-2">
           {doc.links.map((link) => (
             <a
@@ -74,10 +251,26 @@ export default function ResumePreview() {
           ))}
         </div>
 
+        {/* In-preview jump TOC */}
+        <nav
+          className="resume-reveal sticky top-1 z-20 mt-6 flex flex-wrap gap-2 border border-border bg-ink/95 p-2 backdrop-blur-sm"
+          aria-label="Resume sections"
+        >
+          {TOC.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => jumpTo(item.id)}
+              className="border border-transparent px-2.5 py-1.5 font-mono-tech text-[10px] tracking-[0.14em] text-muted uppercase transition-colors hover:border-accent hover:text-accent"
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
+
         <div className="mt-10 grid gap-10 lg:grid-cols-[0.92fr_1.08fr]">
-          {/* Left rail */}
           <div className="space-y-9">
-            <section className="resume-reveal">
+            <section id="rv-edu" className="resume-reveal scroll-mt-24">
               <SectionLabel num="01">Education</SectionLabel>
               <ul className="space-y-5">
                 {doc.education.map((ed) => (
@@ -94,7 +287,7 @@ export default function ResumePreview() {
               </ul>
             </section>
 
-            <section className="resume-reveal">
+            <section id="rv-skills" className="resume-reveal scroll-mt-24">
               <SectionLabel num="02">Skills</SectionLabel>
               <div className="space-y-4">
                 {doc.skillGroups.map((group) => (
@@ -106,7 +299,8 @@ export default function ResumePreview() {
                       {group.items.map((item) => (
                         <span
                           key={item}
-                          className="border border-border bg-ink/60 px-2 py-1 font-mono-tech text-[10px] tracking-[0.06em] text-cream-muted"
+                          data-resume-chip
+                          className="border border-border bg-ink/60 px-2 py-1 font-mono-tech text-[10px] tracking-[0.06em] text-cream-muted opacity-0"
                         >
                           {item}
                         </span>
@@ -117,7 +311,7 @@ export default function ResumePreview() {
               </div>
             </section>
 
-            <section className="resume-reveal">
+            <section id="rv-wins" className="resume-reveal scroll-mt-24">
               <SectionLabel num="03">Signal wins</SectionLabel>
               <ul className="space-y-3">
                 {doc.achievements.map((item) => (
@@ -130,13 +324,15 @@ export default function ResumePreview() {
             </section>
           </div>
 
-          {/* Right column */}
           <div className="space-y-9">
-            <section className="resume-reveal">
+            <section id="rv-exp" className="resume-reveal scroll-mt-24">
               <SectionLabel num="04">Experience</SectionLabel>
               <div className="space-y-7">
                 {doc.experience.map((job) => (
-                  <div key={job.role + job.company} className="relative border border-border bg-ink/50 p-4 sm:p-5">
+                  <div
+                    key={job.role + job.company}
+                    className="relative border border-border bg-ink/50 p-4 transition-colors hover:border-accent sm:p-5"
+                  >
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
                       <h3 className="font-heading text-lg font-medium tracking-[-0.03em] text-cream">
                         {job.role}
@@ -162,7 +358,7 @@ export default function ResumePreview() {
               </div>
             </section>
 
-            <section className="resume-reveal">
+            <section id="rv-systems" className="resume-reveal scroll-mt-24">
               <SectionLabel num="05">Selected systems</SectionLabel>
               <div className="grid gap-3 sm:grid-cols-2">
                 {doc.projects.map((project, i) => (
