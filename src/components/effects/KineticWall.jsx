@@ -20,7 +20,7 @@ const HEADLINES = [
 const QUAD_NOTES = [
   { corner: "NW", label: "SCOPE", body: "Fixed proposals · clear milestones" },
   { corner: "NE", label: "STACK", body: "RAG · agents · LLM apps" },
-  { corner: "SW", label: "SIGNAL", body: "Anime.js kinetic field" },
+  { corner: "SW", label: "SIGNAL", body: "Kinetic motion field" },
   { corner: "SE", label: "OWNED", body: "Architecture → ship → handoff" },
 ];
 

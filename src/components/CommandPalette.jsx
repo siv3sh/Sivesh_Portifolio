@@ -158,16 +158,6 @@ export default function CommandPalette() {
 
   return createPortal(
     <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        className="fixed right-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] z-[90] inline-flex items-center gap-2 border border-[var(--color-border-strong)] bg-ink/95 px-3 py-2.5 font-mono-tech text-[10px] tracking-[0.16em] text-muted uppercase shadow-sm backdrop-blur hover:border-accent hover:text-accent md:right-4 md:bottom-4"
-        aria-label="Open command palette"
-      >
-        Command
-        <kbd className="hidden border border-border px-1.5 py-0.5 text-cream sm:inline">⌘K</kbd>
-      </button>
-
       {open && (
         <div
           className="fixed inset-0 z-[350] flex items-end justify-center bg-[color-mix(in_oklab,#0c0f16_55%,transparent)] p-0 backdrop-blur-md sm:items-start sm:p-6 sm:pt-[12vh]"
