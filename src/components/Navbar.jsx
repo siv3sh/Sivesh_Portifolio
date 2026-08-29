@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { navLinks, profile } from "../data/content";
 import { brand } from "../data/brand";
+import ResumeActions from "./ResumeActions";
 
 function scrollToSection(href, onDone) {
   const id = href.replace("#", "");
@@ -97,13 +98,25 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <a
-          href="#contact"
-          onClick={(e) => handleNav(e, "#contact")}
-          className="btn-neon hidden px-5 py-2.5 md:inline-flex"
-        >
-          Hire {profile.firstName}
-        </a>
+        <div className="hidden items-center gap-3 md:flex">
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event("open-command-palette"))}
+            className="inline-flex items-center gap-1.5 border border-border px-2.5 py-1.5 font-mono-tech text-[10px] tracking-[0.14em] text-muted uppercase transition-colors hover:border-accent hover:text-accent"
+            aria-label="Open command palette"
+            title="Command palette"
+          >
+            <kbd className="text-cream">⌘K</kbd>
+          </button>
+          <ResumeActions variant="nav" />
+          <a
+            href="#contact"
+            onClick={(e) => handleNav(e, "#contact")}
+            className="btn-neon px-5 py-2.5"
+          >
+            Hire {profile.firstName}
+          </a>
+        </div>
 
         <button
           type="button"
@@ -126,7 +139,7 @@ export default function Navbar() {
 
       <div
         className={`overflow-hidden transition-all duration-300 md:hidden ${
-          open ? "max-h-80 opacity-100" : "max-h-0 opacity-0"
+          open ? "max-h-[28rem] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <ul className="border-t border-border bg-ink px-6 py-4">
@@ -143,7 +156,8 @@ export default function Navbar() {
               </a>
             </li>
           ))}
-          <li className="pt-2">
+          <li className="space-y-3 pt-2">
+            <ResumeActions />
             <a
               href="#contact"
               onClick={(e) => handleNav(e, "#contact")}

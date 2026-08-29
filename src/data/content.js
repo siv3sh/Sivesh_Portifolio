@@ -25,6 +25,7 @@ export const navLinks = [
   { label: "Process", href: "#process", id: "process" },
   { label: "Work", href: "#projects", id: "projects" },
   { label: "Experience", href: "#experience", id: "experience" },
+  { label: "FAQ", href: "#faq", id: "faq" },
   { label: "Contact", href: "#contact", id: "contact" },
 ];
 
@@ -34,7 +35,8 @@ export const sectionMeta = {
   skills: { num: "03", label: "Capabilities" },
   projects: { num: "04", label: "Case Studies" },
   experience: { num: "05", label: "Experience" },
-  contact: { num: "06", label: "Contact" },
+  faq: { num: "06", label: "FAQ" },
+  contact: { num: "07", label: "Contact" },
 };
 
 export const heroStats = [
@@ -115,6 +117,13 @@ export const socialLinks = [
   { label: "Email", href: "mailto:hello@sivesh-pb.com" },
 ];
 
+/** Resume file in /public — swap this PDF anytime to update site + downloads */
+export const resume = {
+  fileName: "Sivesh-PB-Resume.pdf",
+  href: "/Sivesh-PB-Resume.pdf",
+  label: "Resume",
+};
+
 export const skillCategories = [
   {
     title: "Generative AI & LLMs",
@@ -185,6 +194,8 @@ export const skillCategories = [
 export const projects = [
   {
     title: "Multi-Agent AI Attrition Analysis System",
+    focus: "Multi-agent · RAG",
+    diagram: "agents",
     stack: ["LangChain", "Python", "Streamlit", "Docker", "RAG", "ChromaDB"],
     problem:
       "HR teams spent hours pulling reports manually and couldn't query employee data in plain language.",
@@ -195,11 +206,15 @@ export const projects = [
       "Self-serve analytics for non-technical staff",
       "Deployed with Docker for easy rollout",
     ],
+    impact: "65%",
+    impactLabel: "Faster insight generation",
     github: "https://github.com/siv3sh",
     featured: true,
   },
   {
     title: "Career Placement Assistant AI Agent",
+    focus: "RAG · Retrieval",
+    diagram: "rag",
     stack: ["Python", "Streamlit", "RAG", "Groq API", "ChromaDB"],
     problem:
       "Placement data lived in spreadsheets — advisors couldn't quickly answer student and recruiter questions.",
@@ -210,11 +225,15 @@ export const projects = [
       "3,000+ records searchable instantly",
       "Handles complex multi-part questions",
     ],
+    impact: "92%",
+    impactLabel: "Retrieval accuracy",
     github: "https://github.com/siv3sh",
     featured: false,
   },
   {
     title: "Mental Health Risk Detection & Response Agent",
+    focus: "On-device · NLP",
+    diagram: "local",
     stack: ["RoBERTa", "Mistral", "Streamlit", "Ollama"],
     problem:
       "Sensitive mental-health screening required accuracy and privacy — cloud APIs were not an option.",
@@ -225,11 +244,15 @@ export const projects = [
       "Zero data sent to external APIs",
       "Production-ready local inference stack",
     ],
+    impact: "88%",
+    impactLabel: "Classification accuracy",
     github: "https://github.com/siv3sh",
     featured: false,
   },
   {
     title: "Automated HR Management System",
+    focus: "Full-stack · Ops",
+    diagram: "fullstack",
     stack: ["Python", "Flask", "PostgreSQL", "React", "Docker"],
     problem:
       "Employee lifecycle management was fragmented across tools with no single source of truth.",
@@ -240,6 +263,8 @@ export const projects = [
       "End-to-end lifecycle in one system",
       "Containerised for consistent deployments",
     ],
+    impact: "200+",
+    impactLabel: "Records managed",
     github: "https://github.com/siv3sh",
     featured: false,
   },
@@ -284,4 +309,31 @@ export const contactAssurances = [
   "Reply within 24 hours on weekdays",
   "NDA-friendly — your ideas stay confidential",
   "Fixed-scope proposals — no open-ended billing surprises",
+];
+
+export const faqs = [
+  {
+    q: "What kinds of projects do you take on?",
+    a: "Production LLM apps, RAG systems, multi-agent workflows, and AI features inside existing products. Best fit is a clear problem with a path to measurable impact.",
+  },
+  {
+    q: "How do engagements usually start?",
+    a: "A free 30-minute discovery call, then a fixed-scope proposal with deliverables, timeline, and pricing. Build starts only after you approve the plan.",
+  },
+  {
+    q: "Do you work with early-stage startups?",
+    a: "Yes — especially teams that need one engineer to own architecture through launch, not just a prototype demo.",
+  },
+  {
+    q: "Can you work under NDA?",
+    a: "Absolutely. Sensitive product and data details stay confidential — happy to sign an NDA before deep technical discussion.",
+  },
+  {
+    q: "What does communication look like during a build?",
+    a: "Weekly demos, written updates, and a shared milestone board. You always know what’s shipping next and what’s blocked.",
+  },
+  {
+    q: "How fast can you start?",
+    a: "Usually within 1–2 weeks of signed scope, depending on current capacity. Availability is shown on the site and updated as bookings fill.",
+  },
 ];

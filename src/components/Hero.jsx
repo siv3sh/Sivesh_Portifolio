@@ -1,7 +1,16 @@
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { socialLinks, heroStats, profile, heroCopy } from "../data/content";
+import {
+  animate,
+  createTimeline,
+  stagger,
+  splitText,
+  scrambleText,
+  utils,
+} from "animejs";
+import { prefersReducedMotion, revealOnScroll } from "../lib/animeMotion";
+import { socialLinks, heroStats, profile, heroCopy, resume } from "../data/content";
+import { brand } from "../data/brand";
+import ResumeActions from "./ResumeActions";
 
 const GitHubIcon = () => (
   <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -32,120 +41,250 @@ const MailIcon = () => (
 
 const iconMap = { GitHub: GitHubIcon, LinkedIn: LinkedInIcon, Email: MailIcon };
 
+function runStatCounters(statNodes) {
+  statNodes.forEach((stat) => {
+    const valueEl = stat.querySelector("[data-metric]");
+    if (!valueEl) return;
+    const raw = valueEl.dataset.metric || valueEl.textContent.trim();
+    const match = raw.match(/^(\d+(?:\.\d+)?)(.*)$/);
+    if (!match) return;
+
+    const target = Number(match[1]);
+    const suffix = match[2] || "";
+    const state = { v: 0 };
+
+    animate(state, {
+      v: target,
+      ease: "outExpo",
+      duration: 1400,
+      onUpdate: () => {
+        valueEl.textContent = `${utils.round(state.v, 0)}${suffix}`;
+      },
+    });
+  });
+}
+
 export default function Hero() {
   const sectionRef = useRef(null);
+  const nameRef = useRef(null);
+  const roleRef = useRef(null);
+  const portraitRef = useRef(null);
   const statsRef = useRef(null);
+  const splitRef = useRef(null);
 
   useEffect(() => {
     const section = sectionRef.current;
-    if (!section) return;
+    if (!section) return undefined;
 
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReduced) return;
+    const reveals = section.querySelectorAll(".hero-reveal");
+    const stats = section.querySelectorAll(".hero-stat");
+    const nameEl = nameRef.current;
+    const roleEl = roleRef.current;
+    const portrait = portraitRef.current;
 
-    const ctx = gsap.context(() => {
-      gsap.from(".hero-reveal", {
-        y: 24,
-        opacity: 0,
-        duration: 0.9,
-        stagger: 0.07,
-        ease: "power3.out",
-        delay: 0.06,
+    if (prefersReducedMotion()) {
+      animate([...reveals, ...stats, portrait].filter(Boolean), {
+        opacity: 1,
+        y: 0,
+        duration: 1,
       });
+      return undefined;
+    }
 
-      if (statsRef.current) {
-        gsap.from(".hero-stat", {
-          y: 18,
-          opacity: 0,
-          stagger: 0.06,
-          duration: 0.7,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: statsRef.current,
-            start: "top 90%",
-            toggleActions: "play none none none",
-          },
-        });
-      }
-    }, section);
+    let split = null;
+    if (nameEl) {
+      split = splitText(nameEl, { chars: true, accessible: true });
+      splitRef.current = split;
+      nameEl.style.opacity = "1";
+      animate(split.chars, { opacity: 0, y: 36, rotateX: -60, duration: 1 });
+    }
 
-    return () => ctx.revert();
+    const tl = createTimeline({ defaults: { ease: "outExpo" } });
+
+    if (portrait) {
+      tl.add(portrait, {
+        opacity: [0, 1],
+        y: [32, 0],
+        duration: 1000,
+      });
+    }
+
+    tl.add(
+      reveals,
+      {
+        opacity: [0, 1],
+        y: [22, 0],
+        duration: 800,
+        delay: stagger(65),
+      },
+      "-=650"
+    );
+
+    if (split?.chars?.length) {
+      tl.add(
+        split.chars,
+        {
+          opacity: [0, 1],
+          y: [36, 0],
+          rotateX: [-60, 0],
+          duration: 920,
+          delay: stagger(26),
+        },
+        "-=700"
+      );
+    }
+
+    if (roleEl) {
+      tl.add(roleEl, { opacity: [0, 1], duration: 180 }, "-=480");
+      tl.add(
+        roleEl,
+        {
+          text: scrambleText({
+            chars: "uppercase",
+            from: "left",
+            cursor: false,
+          }),
+          duration: 1100,
+          ease: "outExpo",
+        },
+        "<"
+      );
+    }
+
+    if (stats.length) {
+      tl.add(
+        stats,
+        {
+          opacity: [0, 1],
+          y: [14, 0],
+          duration: 650,
+          delay: stagger(55),
+        },
+        "-=300"
+      );
+    }
+
+    const stopStats = revealOnScroll(statsRef.current, (_el, reduced) => {
+      if (!reduced) runStatCounters(stats);
+    });
+
+    return () => {
+      tl.pause();
+      tl.cancel?.();
+      split?.revert?.();
+      stopStats();
+    };
   }, []);
 
   return (
-    <section id="hero" ref={sectionRef} className="hero-section relative overflow-hidden">
+    <section
+      id="hero"
+      ref={sectionRef}
+      className="hero-section relative flex min-h-[100svh] flex-col overflow-hidden"
+    >
       <div className="tech-grid pointer-events-none absolute inset-0 -z-10" aria-hidden="true" />
+      <div
+        className="pointer-events-none absolute top-[-10%] right-[-8%] -z-10 h-[70vmax] w-[70vmax] rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--color-accent)_14%,transparent)_0%,transparent_68%)]"
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute bottom-0 left-0 -z-10 h-40 w-full bg-gradient-to-t from-ink to-transparent"
+        aria-hidden="true"
+      />
 
-      <div className="relative z-10 mx-auto grid w-full max-w-6xl items-center gap-14 px-6 pt-36 pb-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16 lg:pt-44 lg:pb-24">
+      <div className="relative z-10 mx-auto grid w-full max-w-6xl flex-1 items-center gap-12 px-6 pt-28 pb-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16 lg:pt-32 lg:pb-12">
         <div className="order-2 lg:order-1">
-          <p className="hero-reveal label-mono bracket">{heroCopy.greeting}</p>
+          <div className="hero-reveal flex items-center gap-3 opacity-0">
+            <span className="crosshair shrink-0" aria-hidden="true" />
+            <p className="label-mono text-accent">[{brand.monogram}]</p>
+            <span className="rule-strong max-w-12 flex-1" />
+            <p className="label-mono bracket">{brand.line}</p>
+          </div>
 
-          <h1 className="hero-reveal mt-4">
-            <span className="block font-heading text-5xl leading-[0.92] font-medium tracking-[-0.04em] text-cream sm:text-6xl lg:text-7xl">
+          <h1 className="mt-6" style={{ perspective: "800px" }}>
+            <span
+              ref={nameRef}
+              className="hero-name-split block font-heading text-[clamp(3rem,8vw,5.5rem)] leading-[0.9] font-medium tracking-[-0.045em] text-cream"
+            >
               {profile.fullName}
             </span>
-            <span className="mt-4 block font-mono-tech text-[12px] tracking-[0.32em] text-accent uppercase">
+            <span
+              ref={roleRef}
+              className="mt-4 block font-mono-tech text-[12px] tracking-[0.34em] text-accent uppercase opacity-0"
+            >
               {profile.role}
             </span>
           </h1>
 
-          <div className="hero-reveal mt-8 flex items-start gap-5">
-            <span className="crosshair mt-3 shrink-0" aria-hidden="true" />
-            <div className="space-y-1">
-              {heroCopy.lines.map((line) => (
-                <p
-                  key={line}
-                  className="font-heading text-xl leading-[1.35] font-medium tracking-[-0.02em] text-cream/90 sm:text-2xl"
-                >
-                  {line}
-                </p>
-              ))}
-            </div>
-          </div>
+          <p className="hero-reveal mt-7 max-w-md font-heading text-xl leading-snug font-medium tracking-[-0.025em] text-cream opacity-0 sm:text-2xl">
+            {heroCopy.lines[0]}{" "}
+            <span className="text-cream-muted">{heroCopy.lines[1]}</span>
+          </p>
 
-          <p className="hero-reveal mt-6 max-w-xl text-base leading-relaxed text-cream-muted sm:text-lg">
+          <p className="hero-reveal mt-5 max-w-lg text-base leading-relaxed text-cream-muted opacity-0">
             {profile.tagline}
           </p>
 
-          <div className="hero-reveal mt-6 inline-flex items-center gap-2.5 border border-border px-3 py-2 font-mono-tech text-[11px] tracking-[0.14em] text-muted uppercase">
-            <span className="signal-dot" aria-hidden="true" />
-            {profile.availability}
-          </div>
-
-          <div className="hero-reveal mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <a href="#contact" className="btn-neon px-8 py-3.5 text-center sm:px-10 sm:py-4">
+          <div className="hero-reveal mt-9 flex flex-col gap-3 opacity-0 sm:flex-row sm:items-center">
+            <a href="#contact" className="btn-neon px-8 py-3.5 text-center sm:px-10">
               Book a free discovery call
             </a>
-            <a href="#projects" className="btn-ghost px-8 py-3.5 text-center sm:px-10 sm:py-4">
+            <a href="#projects" className="btn-ghost px-8 py-3.5 text-center sm:px-10">
               View my work
             </a>
           </div>
 
-          <div className="hero-reveal mt-8 flex items-center gap-3">
-            {socialLinks.map((link) => {
-              const Icon = iconMap[link.label];
-              return (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  target={link.label !== "Email" ? "_blank" : undefined}
-                  rel={link.label !== "Email" ? "noopener noreferrer" : undefined}
-                  aria-label={link.label}
-                  className="flex h-11 w-11 items-center justify-center border border-border text-cream-muted transition-colors hover:border-accent hover:text-accent"
-                >
-                  <Icon />
-                </a>
-              );
-            })}
+          <div className="hero-reveal mt-5 flex flex-wrap items-center gap-x-5 gap-y-3 opacity-0">
+            <ResumeActions className="!gap-2" />
+            <span className="hidden h-4 w-px bg-border sm:block" aria-hidden="true" />
+            <div className="flex items-center gap-2">
+              {socialLinks.map((link) => {
+                const Icon = iconMap[link.label];
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target={link.label !== "Email" ? "_blank" : undefined}
+                    rel={link.label !== "Email" ? "noopener noreferrer" : undefined}
+                    aria-label={link.label}
+                    className="flex h-10 w-10 items-center justify-center border border-border text-cream-muted transition-colors hover:border-accent hover:text-accent"
+                  >
+                    <Icon />
+                  </a>
+                );
+              })}
+            </div>
           </div>
         </div>
 
-        <div className="hero-reveal order-1 flex justify-center lg:order-2 lg:justify-end">
-          <div className="hero-portrait-frame relative mx-auto w-full max-w-md lg:ml-auto">
-            <div className="absolute -inset-3 border border-border" aria-hidden="true">
+        <div className="order-1 flex justify-center lg:order-2 lg:justify-end">
+          <div
+            ref={portraitRef}
+            className="hero-portrait-frame relative mx-auto w-full max-w-[22rem] opacity-0 sm:max-w-md lg:ml-auto lg:max-w-[26rem]"
+          >
+            <div
+              className="pointer-events-none absolute -inset-6 -z-10 bg-[radial-gradient(circle_at_center,color-mix(in_oklab,var(--color-accent)_18%,transparent),transparent_70%)]"
+              aria-hidden="true"
+            />
+
+            <div className="absolute -inset-3 border border-[var(--color-border-strong)]" aria-hidden="true">
               <div className="corner-frame absolute inset-0" />
               <div className="corner-frame-alt absolute inset-0" />
             </div>
+
+            <div className="absolute top-0 left-0 z-20 -translate-y-full pb-3">
+              <p className="font-mono-tech text-[10px] tracking-[0.2em] text-accent uppercase">
+                [{brand.monogram} · PORTRAIT]
+              </p>
+            </div>
+
+            <div className="absolute top-0 right-0 z-20 -translate-y-full pb-3 text-right">
+              <p className="inline-flex items-center gap-2 border border-border bg-ink/90 px-2.5 py-1.5 font-mono-tech text-[10px] tracking-[0.14em] text-muted uppercase backdrop-blur-sm">
+                <span className="signal-dot" aria-hidden="true" />
+                {profile.availability}
+              </p>
+            </div>
+
             <img
               src="/sivesh-portrait.png?v=9"
               alt={`${profile.fullName}, ${profile.role}`}
@@ -155,29 +294,55 @@ export default function Hero() {
               decoding="async"
               fetchPriority="high"
             />
-            <div className="scanlines pointer-events-none absolute inset-0 opacity-40" aria-hidden="true" />
+
+            <div className="scanlines pointer-events-none absolute inset-0 z-[2] opacity-35" aria-hidden="true" />
+
+            <div className="absolute right-0 bottom-0 z-20 translate-y-full pt-3 text-right">
+              <p className="font-mono-tech text-[10px] tracking-[0.16em] text-muted uppercase">
+                Remote · Ideaelan
+              </p>
+              <a
+                href={resume.href}
+                download={resume.fileName}
+                className="mt-1 inline-block font-mono-tech text-[10px] tracking-[0.16em] text-accent uppercase transition-opacity hover:opacity-70"
+              >
+                ↓ {resume.fileName}
+              </a>
+            </div>
           </div>
         </div>
       </div>
 
-      <div ref={statsRef} className="relative z-10 mx-auto w-full max-w-6xl px-6 pb-20">
+      <div ref={statsRef} className="relative z-10 mx-auto w-full max-w-6xl px-6 pb-8 lg:pb-10">
         <div className="rule-strong" />
         <dl className="grid grid-cols-2 sm:grid-cols-4">
           {heroStats.map((stat) => (
             <div
               key={stat.label}
-              className="hero-stat border-b border-[var(--color-border-strong)] px-1 py-7 sm:border-b-0 sm:border-r sm:px-6 sm:first:pl-0 sm:last:border-r-0"
+              className="hero-stat border-b border-[var(--color-border-strong)] px-1 py-6 opacity-0 sm:border-b-0 sm:border-r sm:px-6 sm:py-7 sm:first:pl-0 sm:last:border-r-0"
             >
-              <dt className="font-heading text-4xl leading-none font-medium tracking-[-0.03em] text-cream">
+              <dt
+                data-metric={stat.value}
+                className="font-heading text-3xl leading-none font-medium tracking-[-0.03em] text-cream md:text-4xl"
+              >
                 {stat.value}
               </dt>
-              <dd className="mt-2.5 font-mono-tech text-[10px] leading-snug tracking-[0.12em] text-muted uppercase">
+              <dd className="mt-2 font-mono-tech text-[10px] leading-snug tracking-[0.12em] text-muted uppercase">
                 {stat.label}
               </dd>
             </div>
           ))}
         </dl>
         <div className="rule-strong" />
+
+        <a
+          href="#trust"
+          className="hero-reveal mt-6 flex items-center justify-center gap-3 opacity-0 font-mono-tech text-[10px] tracking-[0.2em] text-muted uppercase transition-colors hover:text-accent"
+        >
+          <span className="h-8 w-px bg-accent/50" aria-hidden="true" />
+          Scroll · signal continues
+          <span className="h-8 w-px bg-accent/50" aria-hidden="true" />
+        </a>
       </div>
     </section>
   );

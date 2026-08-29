@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SectionHeading from "./SectionHeading";
 import { contactAssurances, profile } from "../data/content";
+import { copyText, useToast } from "./Toast";
 
 const CONTACT_EMAIL = "hello@sivesh-pb.com";
 const FORMSUBMIT_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
@@ -36,6 +37,17 @@ export default function Contact() {
   const formRef = useRef(null);
   const [status, setStatus] = useState("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const { push } = useToast();
+
+  const handleCopyEmail = async (e) => {
+    e.preventDefault();
+    try {
+      await copyText(CONTACT_EMAIL);
+      push("Email copied", "accent");
+    } catch {
+      push("Could not copy — use mailto instead");
+    }
+  };
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -131,27 +143,56 @@ export default function Contact() {
 
         <div className="grid gap-8 lg:grid-cols-5 lg:gap-12">
           <div className="space-y-4 lg:col-span-2">
-            {contactInfo.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                target={item.label !== "Email" ? "_blank" : undefined}
-                rel={item.label !== "Email" ? "noopener noreferrer" : undefined}
-                className="contact-channel glass interactive-card group flex items-center gap-4 border border-border p-5 hover:border-accent"
-              >
-                <span className="flex h-10 w-10 items-center justify-center border border-accent/30 bg-accent/10 text-accent">
-                  {item.icon}
-                </span>
-                <div>
-                  <p className="font-mono-tech text-[10px] tracking-widest text-muted uppercase">
-                    {item.label}
-                  </p>
-                  <p className="mt-0.5 text-sm text-cream transition-colors group-hover:text-accent">
-                    {item.value}
-                  </p>
+            {contactInfo.map((item) =>
+              item.label === "Email" ? (
+                <div
+                  key={item.label}
+                  className="contact-channel glass interactive-card flex items-center gap-4 border border-border p-5 hover:border-accent"
+                >
+                  <span className="flex h-10 w-10 items-center justify-center border border-accent/30 bg-accent/10 text-accent">
+                    {item.icon}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-mono-tech text-[10px] tracking-widest text-muted uppercase">
+                      {item.label}
+                    </p>
+                    <a
+                      href={item.href}
+                      className="mt-0.5 block truncate text-sm text-cream transition-colors hover:text-accent"
+                    >
+                      {item.value}
+                    </a>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleCopyEmail}
+                    className="shrink-0 border border-border px-2.5 py-1.5 font-mono-tech text-[10px] tracking-[0.14em] text-muted uppercase transition-colors hover:border-accent hover:text-accent"
+                  >
+                    Copy
+                  </button>
                 </div>
-              </a>
-            ))}
+              ) : (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="contact-channel glass interactive-card group flex items-center gap-4 border border-border p-5 hover:border-accent"
+                >
+                  <span className="flex h-10 w-10 items-center justify-center border border-accent/30 bg-accent/10 text-accent">
+                    {item.icon}
+                  </span>
+                  <div>
+                    <p className="font-mono-tech text-[10px] tracking-widest text-muted uppercase">
+                      {item.label}
+                    </p>
+                    <p className="mt-0.5 text-sm text-cream transition-colors group-hover:text-accent">
+                      {item.value}
+                    </p>
+                  </div>
+                </a>
+              )
+            )}
 
             <div className="contact-channel glass mt-2 border border-border p-5">
               <p className="font-mono-tech text-xs tracking-widest text-accent uppercase">
@@ -267,9 +308,13 @@ export default function Contact() {
                     </button>
                     <p className="mt-4 text-center text-xs text-muted">
                       Prefer email?{" "}
-                      <a href={`mailto:${CONTACT_EMAIL}`} className="link-underline">
-                        {CONTACT_EMAIL}
-                      </a>
+                      <button
+                        type="button"
+                        onClick={handleCopyEmail}
+                        className="link-underline"
+                      >
+                        Copy {CONTACT_EMAIL}
+                      </button>
                     </p>
                   </>
                 )}
