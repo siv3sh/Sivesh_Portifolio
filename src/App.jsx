@@ -18,7 +18,6 @@ import ScrollProgress from "./components/effects/ScrollProgress";
 import CursorField from "./components/effects/CursorField";
 import SystemBoot from "./components/effects/SystemBoot";
 import KineticWall from "./components/effects/KineticWall";
-import ScrollChapters from "./components/effects/ScrollChapters";
 import SmoothScroll from "./providers/SmoothScroll";
 
 export default function App() {
@@ -28,7 +27,6 @@ export default function App() {
         <div className="relative min-h-screen bg-ink">
           <SystemBoot />
           <ScrollProgress />
-          <ScrollChapters />
           <GlobalBackground />
           <CursorField />
           <CommandPalette />

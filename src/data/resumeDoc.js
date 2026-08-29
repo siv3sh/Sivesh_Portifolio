@@ -29,7 +29,7 @@ export const resumeDoc = {
       role: "Junior AI Engineer",
       company: "Ideaelan",
       place: "Remote",
-      period: "Jan 2025 – Present",
+      period: "Jan 2026 – Present",
       bullets: [
         "Built a Monday.com-style project & ticket platform for Infinity X, extended with Agentic AI automation.",
         "Shipped Flask LLM microservices with LangChain agentic pipelines and RAG (ChromaDB) for production support.",

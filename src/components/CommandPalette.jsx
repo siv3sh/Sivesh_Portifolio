@@ -240,7 +240,6 @@ export default function CommandPalette() {
 
             <div className="flex items-center justify-between border-t border-border px-4 py-2 font-mono-tech text-[10px] tracking-[0.12em] text-muted uppercase">
               <span>↑↓ Navigate · ↵ Run · Esc Close</span>
-              <span>Anime.js palette</span>
             </div>
           </div>
         </div>

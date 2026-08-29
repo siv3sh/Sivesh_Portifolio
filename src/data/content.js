@@ -275,7 +275,7 @@ export const experience = [
     role: "Junior AI Engineer",
     company: "Ideaelan",
     location: "Remote",
-    period: "Jan 2025 – Present",
+    period: "Jan 2026 – Present",
     highlights: [
       "Shipped a production AI support platform integrated with Infinity X — used daily by support teams",
       "Built ticket risk classification and escalation pipelines that reduce manual triage",
